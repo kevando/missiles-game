@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import Meteor, { createContainer } from 'react-native-meteor';
+// import Meteor, { createContainer } from 'react-native-meteor';
 import Details from './Details';
 
 const DetailsContainer = ({ detailsReady }) => {
@@ -14,9 +14,11 @@ DetailsContainer.propTypes = {
   detailsReady: PropTypes.bool,
 };
 
-export default createContainer(() => {
-  const handle = Meteor.subscribe('details-list');
-  return {
-    detailsReady: handle.ready(),
-  };
-}, DetailsContainer);
+export default DetailsContainer;
+
+// export default createContainer(() => {
+//   const handle = Meteor.subscribe('details-list');
+//   return {
+//     detailsReady: handle.ready(),
+//   };
+// }, DetailsContainer);

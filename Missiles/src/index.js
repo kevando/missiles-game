@@ -1,23 +1,34 @@
 import React from 'react';
-import Meteor, { createContainer } from 'react-native-meteor';
+// import Meteor, { createContainer } from 'react-native-meteor';
 
 import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
 import Loading from './components/Loading';
 import settings from './config/settings';
 
-Meteor.connect(settings.METEOR_URL);
+// Meteor.connect(settings.METEOR_URL);
 
-const RNApp = (props) => {
-  const { status, user, loggingIn } = props;
+// const RNApp = (props) => {
+class RNApp extends React.Component {
 
-  if (status.connected === false || loggingIn) {
-    return <Loading />;
-  } else if (user !== null) {
-    return <LoggedIn />;
+
+  render() {
+
+    const { status={}, user, loggingIn } = this.props;
+
+    if (false || status.connected === false || loggingIn) {
+
+      return <Loading />;
+    } else if (true || user !== null) {
+      return <LoggedIn />;
+    } else {
+      return <LoggedOut />;
+    }
+
   }
-  return <LoggedOut />;
-};
+
+}
+
 
 RNApp.propTypes = {
   status: React.PropTypes.object,
@@ -25,10 +36,12 @@ RNApp.propTypes = {
   loggingIn: React.PropTypes.bool,
 };
 
-export default createContainer(() => {
-  return {
-    status: Meteor.status(),
-    user: Meteor.user(),
-    loggingIn: Meteor.loggingIn(),
-  };
-}, RNApp);
+export default RNApp;
+
+// export default createContainer(() => {
+//   return {
+//     status: Meteor.status(),
+//     user: Meteor.user(),
+//     loggingIn: Meteor.loggingIn(),
+//   };
+// }, RNApp);
