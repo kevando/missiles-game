@@ -1,5 +1,6 @@
 import {
   ADD_ITEM,
+  UPDATE_ITEM,
   REMOVE_ITEM,
   OFFLINE_ITEMS_LOADED,
   CONNECTION_CHECKING,
@@ -7,6 +8,8 @@ import {
   CONNECTION_ONLINE,
   CONNECTION_OFFLINE
 } from '../actions/items'
+
+import _ from 'lodash';
 
 const initialState = {
   onlineList: [],
@@ -21,6 +24,26 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
   case ADD_ITEM:
     list = state.onlineList.concat([action.itemData]).sort((a, b) => b.time - a.time)
+
+    return {
+      ...state,
+      onlineList: list,
+      offlineList: list
+    }
+
+  case UPDATE_ITEM:
+
+    console.log('UPDATE')
+    // Find item index using indexOf+find
+    var index = _.indexOf(state.onlineList, _.find(state.onlineList, {id: action.itemData.id}));
+
+    list =
+    [
+      ...state.onlineList.slice(0, index),
+      action.itemData,
+      ...state.onlineList.slice(index + 1)
+    ]
+
 
     return {
       ...state,

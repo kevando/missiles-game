@@ -1,6 +1,7 @@
 import offline from 'react-native-simple-store'
 
 export const ADD_ITEM = 'ADD_ITEM'
+export const UPDATE_ITEM = 'UPDATE_ITEM'
 export const REMOVE_ITEM = 'REMOVE_ITEM'
 export const OFFLINE_ITEMS_LOADED = 'OFFLINE_ITEMS_LOADED'
 export const CONNECTION_CHECKING = 'CONNECTION_CHECKING'
@@ -11,6 +12,13 @@ export const CONNECTION_OFFLINE = 'CONNECTION_OFFLINE'
 export function addItem(itemData) {
   return {
     type: ADD_ITEM,
+    itemData: itemData
+  }
+}
+
+export function updateItem(itemData) {
+  return {
+    type: UPDATE_ITEM,
     itemData: itemData
   }
 }

@@ -11,16 +11,16 @@ import { initializeApp } from 'firebase'
 import config from '../config'
 import Item from './Item'
 
-// const firebaseApp = initializeApp({
-//   apiKey: config.API_KEY,
-//   authDomain: config.AUTH_DOMAIN,
-//   databaseURL: config.DATABASE_URL,
-//   storageBucket: config.STORAGE_BUCKET
-// })
-// const itemsRef = firebaseApp.database().ref('items')
-// const connectedRef = firebaseApp.database().ref('.info/connected')
+const firebaseApp = initializeApp({
+  apiKey: config.API_KEY,
+  authDomain: config.AUTH_DOMAIN,
+  databaseURL: config.DATABASE_URL,
+  storageBucket: config.STORAGE_BUCKET
+})
+const itemsRef = firebaseApp.database().ref('items')
+const connectedRef = firebaseApp.database().ref('.info/connected')
 
-export default class Groceries extends Component {
+export default class Missiles extends Component {
   constructor(props) {
     super(props)
 
@@ -38,7 +38,9 @@ export default class Groceries extends Component {
       this.props.addItem(snapshot.val())
     })
 
-    
+    itemsRef.on('child_changed', (snapshot) => {
+      this.props.updateItem(snapshot.val())
+    })
 
     itemsRef.on('child_removed', (snapshot) => {
       this.props.removeItem(snapshot.val().id)
