@@ -1,9 +1,45 @@
-import { AppRegistry } from 'react-native';
-import App from './src';
+import React, { Component } from 'react'
+import { AppRegistry } from 'react-native'
+import { Provider } from 'react-redux'
+import App from './src/containers/App'
+import configureStore from './src/store/configureStore'
 
-AppRegistry.registerComponent('Missiles', () => App);
+const store = configureStore()
+
+class Groceries extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <App />
+      </Provider>
+    )
+  }
+}
+
+AppRegistry.registerComponent('Missiles', () => Groceries)
 
 
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------
+// This is the exNav boilerplater
+
+// import { AppRegistry } from 'react-native';
+// import App from './src';
+//
+// AppRegistry.registerComponent('Missiles', () => App);
+
+
+//----------------------------------------
+// This was the original missiles app v1
 
 // import React, { Component } from 'react';
 // import {
