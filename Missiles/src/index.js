@@ -1,47 +1,67 @@
-import React from 'react';
-// import Meteor, { createContainer } from 'react-native-meteor';
+
+import React, { Component } from 'react'
+import { AppRegistry } from 'react-native'
+import { Provider } from 'react-redux'
+// import App from './src/containers/App'
+import configureStore from './store/configureStore'
+
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+// import Groceries from '../components/Groceries'
+// import Missiles from '../components/Missiles'
+import * as ItemsActions from './actions/items'
+
 
 import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
 import Loading from './components/Loading';
 import settings from './config/settings';
 
-// Meteor.connect(settings.METEOR_URL);
+const store = configureStore()
 
-// const RNApp = (props) => {
-class RNApp extends React.Component {
+
+class App extends Component {
 
 
   render() {
 
-    const { status={}, user, loggingIn } = this.props;
+    console.log('store',store)
+    return (
+      <Provider store={store}>
+             <Loading />
+           </Provider>
+    )
 
-    if (false || status.connected === false || loggingIn) {
-
-      return <Loading />;
-    } else if (true || user !== null) {
-      return <LoggedIn />;
-    } else {
-      return <LoggedOut />;
-    }
+    // const { status={}, user, loggingIn } = this.props;
+    //
+    // if (false || status.connected === false || loggingIn) {
+    //
+    //   return <Loading />;
+    // } else if (true || user !== null) {
+    //   return <LoggedIn />;
+    // } else {
+    //   return <LoggedOut />;
+    // }
 
   }
 
 }
 
 
-RNApp.propTypes = {
-  status: React.PropTypes.object,
-  user: React.PropTypes.object,
-  loggingIn: React.PropTypes.bool,
-};
 
-export default RNApp;
+function mapStateToProps(state) {
+  return {
+    onlineItems: state.items.onlineList,
+    offlineItems: state.items.offlineList,
+    connectionChecked: state.items.connectionChecked,
+    connected: state.items.connected
+  }
+}
 
-// export default createContainer(() => {
-//   return {
-//     status: Meteor.status(),
-//     user: Meteor.user(),
-//     loggingIn: Meteor.loggingIn(),
-//   };
-// }, RNApp);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(ItemsActions, dispatch)
+}
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Groceries)
+// export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App;

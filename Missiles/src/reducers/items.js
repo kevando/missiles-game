@@ -11,10 +11,12 @@ import {
 
 import _ from 'lodash';
 
+
+
 const initialState = {
   onlineList: [],
   offlineList: [],
-  connectionChecked: false
+  connectionChecked: false,
 }
 
 export default function reducer(state = initialState, action) {

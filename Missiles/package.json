@@ -17,6 +17,7 @@
     "react-native-background-geolocation": "^1.5.2",
     "react-native-device-info": "^0.9.6",
     "react-native-emoji": "^1.2.0",
+    "react-native-fbsdk": "^0.4.0",
     "react-native-fcm": "^2.3.2",
     "react-native-keyboard-spacer": "^0.3.0",
     "react-native-maps": "^0.10.2",

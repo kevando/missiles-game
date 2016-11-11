@@ -7,7 +7,7 @@ import {
   TextInput,
   View
 } from 'react-native'
-import { initializeApp } from 'firebase'
+import firebase, { initializeApp } from 'firebase'
 import config from '../config'
 import Item from './Item'
 
@@ -17,8 +17,12 @@ const firebaseApp = initializeApp({
   databaseURL: config.DATABASE_URL,
   storageBucket: config.STORAGE_BUCKET
 })
-const itemsRef = firebaseApp.database().ref('items')
-const connectedRef = firebaseApp.database().ref('.info/connected')
+const itemsRef = firebaseApp.database().ref('items');
+const logsRef = firebaseApp.database().ref('logs');
+const connectedRef = firebaseApp.database().ref('.info/connected');
+
+
+
 
 export default class Missiles extends Component {
   constructor(props) {
@@ -94,6 +98,8 @@ export default class Missiles extends Component {
   _remove(id) {
     itemsRef.child(id).remove()
   }
+
+
 
   render() {
     console.log('PROPS!')
