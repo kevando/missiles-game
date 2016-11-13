@@ -5,18 +5,21 @@ import Stockpile from './Stockpile';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as AuthActions from '../../actions/auth';
+import * as playersActions from '../../actions/players';
 
-function mapStateToProps({missiles}) {
+function mapStateToProps({missiles, app, players}) {
   return {
     // probly some loggingIn state info
     // connectionChecked: state.items.connectionChecked,
-    missiles: missiles
+    missiles: missiles,
+    authData: app.authData,
+    players
+
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AuthActions, dispatch)
+  return bindActionCreators(playersActions, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stockpile)

@@ -5,7 +5,7 @@ import News from './News';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as AuthActions from '../../actions/auth'
+import * as appActions from '../../actions/app'
 
 function mapStateToProps(state) {
   return {
@@ -16,7 +16,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AuthActions, dispatch)
+  return bindActionCreators(appActions, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(News)

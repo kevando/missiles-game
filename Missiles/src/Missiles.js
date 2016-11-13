@@ -13,8 +13,9 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import * as authActions from './actions/auth';
+
 import * as appActions from './actions/app'; //
+import * as playersActions from './actions/players';
 
 import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
@@ -23,6 +24,11 @@ import Loading from './components/Loading';
 
 class Missiles extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { appInitialized: false }
+  }
+
   componentWillMount() {
     const { appActions, connectedRef } = this.props;
     // Dispatch a Firebase action to set the connection status
@@ -30,19 +36,39 @@ class Missiles extends Component {
   }
 
   componentDidMount () {
-    const { authActions } = this.props;
+    const { appActions} = this.props;
     // This listener determines whether user is logged in or not
-    authActions.listenForAuthChanges();
+    appActions.listenForAuthChanges();
+
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+
+    const { connected, authData, playersActions, playersRef  } = this.props;
+    const { appInitialized } = this.state;
+
+    if(connected && authData.uid && !appInitialized ) {
+      // We know the user is authorized, so lets grab data!
+
+      this.setState({appInitialized: true});
+
+      playersActions.listenForPlayers(playersRef);
+      // Probably more listeners will go here
+
+    }
+
   }
 
 
   render() {
-    const { connected, user } = this.props;
+    const { connected, authData, user } = this.props;
+    console.log('Missile props',this.props);
 
     if (!connected) {
       return <Loading />;
 
-    } else if (user.uid) {
+    } else if (user.username) {
       return <LoggedIn />;
 
     } else {
@@ -57,15 +83,17 @@ class Missiles extends Component {
 function mapStateToProps(state) {
   return {
     connected: state.app.connected,
-    user: state.user,
-    connectedRef: state.firebase.connectedRef
+    authData: state.app.authData,
+    user: state.app.user,
+    connectedRef: state.firebase.connectedRef,
+    playersRef: state.firebase.playersRef
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     appActions: bindActionCreators(appActions, dispatch),
-    authActions: bindActionCreators(authActions, dispatch)
+    playersActions: bindActionCreators(playersActions, dispatch),
   }
 }
 

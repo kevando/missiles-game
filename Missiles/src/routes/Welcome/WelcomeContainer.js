@@ -5,7 +5,7 @@ import Welcome from './Welcome';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as AuthActions from '../../actions/auth'
+// import * as AuthActions from '../../actions/auth'
 
 function mapStateToProps(state) {
   return {
@@ -15,8 +15,8 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AuthActions, dispatch)
-}
+// function mapDispatchToProps(dispatch) {
+//   return bindActionCreators(AuthActions, dispatch)
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Welcome)
+export default connect(mapStateToProps)(Welcome)
