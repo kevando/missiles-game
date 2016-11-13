@@ -1,7 +1,7 @@
 import React from 'react';
 import Stockpile from '../routes/Stockpile';
 import News from '../routes/News';
-import Details from '../routes/Details';
+import Welcome from '../routes/Welcome';
 import Profile from '../routes/Profile';
 import SignIn from '../routes/SignIn';
 
@@ -20,6 +20,26 @@ export const routes = {
       },
     };
   },
+
+  // --------------------------------------------------------------------
+
+  // WELCOME ROUTE
+
+  getWelcomeRoute() {
+    return {
+      renderScene(navigator) {
+        return <Welcome navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Welcome';
+      },
+    };
+  },
+
+  // --------------------------------------------------------------------
+
+  // STOCKPILE ROUTE
 
   getStockpileRoute() {
     return {

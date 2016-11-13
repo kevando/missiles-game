@@ -11,7 +11,6 @@ import {
 
 import _ from 'lodash';
 
-
 import { initializeApp } from 'firebase'
 import config from '../config/firebase';
 
@@ -20,9 +19,13 @@ const firebaseApp = initializeApp({
   authDomain: config.AUTH_DOMAIN,
   databaseURL: config.DATABASE_URL,
   storageBucket: config.STORAGE_BUCKET
-})
-const itemsRef = firebaseApp.database().ref('items');
-const logsRef = firebaseApp.database().ref('logs');
+});
+
+const V = config.VERSION;
+
+const itemsRef = firebaseApp.database().ref(`${V}/items`);
+const logsRef = firebaseApp.database().ref(`${V}/logs`);
+const playersRef = firebaseApp.database().ref(`${V}/players`);
 const connectedRef = firebaseApp.database().ref('.info/connected');
 
 
@@ -30,6 +33,7 @@ const connectedRef = firebaseApp.database().ref('.info/connected');
 const initialState = {
   logsRef,
   connectedRef,
+  playersRef,
 }
 
 export default function reducer(state = initialState, action) {

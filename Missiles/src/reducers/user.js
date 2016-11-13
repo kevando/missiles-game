@@ -8,6 +8,9 @@ import _ from 'lodash';
 const initialState = {
   username: 'douche',
   uid: null,
+  pushToken: null,
+  location: null,
+  notifications: false,
 
 }
 
@@ -18,7 +21,7 @@ export default function reducer(user = initialState, action) {
   case SET_AUTH_DATA:
 
     return {
-      username: 'hardcoded',
+      username: action.authData.username,
       uid: action.authData.uid,
     }
 

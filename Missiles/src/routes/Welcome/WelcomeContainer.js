@@ -1,7 +1,6 @@
-
 import React, { Component } from 'react';
 
-import Profile from './Profile';
+import Welcome from './Welcome';
 
 
 import { bindActionCreators } from 'redux'
@@ -10,7 +9,9 @@ import * as AuthActions from '../../actions/auth'
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
+    // probly some loggingIn state info
+    // connectionChecked: state.items.connectionChecked,
+    // connected: state.items.connected
   }
 }
 
@@ -18,4 +19,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(AuthActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(Welcome)
