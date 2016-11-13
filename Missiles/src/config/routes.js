@@ -1,18 +1,34 @@
 import React from 'react';
-import Home from '../routes/Home';
+import Stockpile from '../routes/Stockpile';
+import News from '../routes/News';
 import Details from '../routes/Details';
 import Profile from '../routes/Profile';
 import SignIn from '../routes/SignIn';
 
 export const routes = {
-  getHomeRoute() {
+
+  // NEWS ROUTE
+
+  getNewsRoute() {
     return {
       renderScene(navigator) {
-        return <Home navigator={navigator} />;
+        return <News navigator={navigator} />;
       },
 
       getTitle() {
-        return 'Home';
+        return 'News';
+      },
+    };
+  },
+
+  getStockpileRoute() {
+    return {
+      renderScene(navigator) {
+        return <Stockpile navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Stockpile';
       },
     };
   },
