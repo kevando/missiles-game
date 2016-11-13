@@ -6,8 +6,8 @@ export const REMOVE_ITEM = 'REMOVE_ITEM'
 export const OFFLINE_ITEMS_LOADED = 'OFFLINE_ITEMS_LOADED'
 export const CONNECTION_CHECKING = 'CONNECTION_CHECKING'
 export const CONNECTION_CHECKED = 'CONNECTION_CHECKED'
-export const CONNECTION_ONLINE = 'CONNECTION_ONLINE'
-export const CONNECTION_OFFLINE = 'CONNECTION_OFFLINE'
+// export const CONNECTION_ONLINE = 'CONNECTION_ONLINE'
+// export const CONNECTION_OFFLINE = 'CONNECTION_OFFLINE'
 
 export function addItem(itemData) {
   return {
@@ -51,15 +51,15 @@ export function checkConnection() {
     setTimeout(() => dispatch({type: CONNECTION_CHECKED}), 5000)
   }
 }
-
-export function goOnline() {
-  return {
-    type: CONNECTION_ONLINE
-  }
-}
-
-export function goOffline() {
-  return {
-    type: CONNECTION_OFFLINE
-  }
-}
+//
+// export function goOnline() {
+//   return {
+//     type: CONNECTION_ONLINE
+//   }
+// }
+//
+// export function goOffline() {
+//   return {
+//     type: CONNECTION_OFFLINE
+//   }
+// }

@@ -6,7 +6,8 @@ import Button from '../../components/Button';
 import styles from './styles';
 
 const SignIn = (props) => {
-  const { updateState, logIn, } = props;
+
+  const { logIn, playersRef } = props;
 
   return (
     <View style={styles.container}>
@@ -16,7 +17,7 @@ const SignIn = (props) => {
       </View>
 
       <View style={styles.buttons}>
-        <Button text="Sign In as Kevin" onPress={() => logIn('kevin')} />
+        <Button text="Sign In as Kevin" onPress={() => logIn('kevin',playersRef)} />
       </View>
 
       <KeyboardSpacer />

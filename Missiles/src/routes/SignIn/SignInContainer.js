@@ -9,9 +9,7 @@ import * as AuthActions from '../../actions/auth'
 
 function mapStateToProps(state) {
   return {
-    // probly some loggingIn state info
-    // connectionChecked: state.items.connectionChecked,
-    // connected: state.items.connected
+    playersRef: state.firebase.playersRef,
   }
 }
 

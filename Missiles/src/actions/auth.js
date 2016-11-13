@@ -2,8 +2,15 @@ import offline from 'react-native-simple-store'
 
 
 export const SET_AUTH_DATA = 'SET_AUTH_DATA';
+export const UPDATE_PLAYER = 'UPDATE_PLAYER';
 
 import firebase from 'firebase';
+
+
+// -------------------------------------------------------------------------
+//  ACTION CREATORS
+// -------------------------------------------------------------------------
+
 
 export function listenForAuthChanges() {
   return dispatch => {
@@ -14,6 +21,8 @@ export function listenForAuthChanges() {
 
       if(authData) {
         dispatch({ type: SET_AUTH_DATA, authData });
+
+        // dispatch({ type: UPDATE_PLAYER, authData });
         // updateState({authData});
         // setUser(authData);
         // I think this only gets called once, so I should be good to call it here
@@ -27,19 +36,19 @@ export function listenForAuthChanges() {
   }
 }
 
-export function logIn(username) {
+export function logIn(username,playersRef) {
   return dispatch => {
-    var email = username+"@kevinhabich.com";
-    var password = "12345678";
+    var email = username+"@kevinhabich.com"; // tmp
+    var password = "12345678"; // tmp
 
     // const { pushToken } = this.state;
 
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then(function(authData) {
-
-
-      // Auth Listener will set user data
-
+      // Update player data
+      playersRef
+        .child(authData.uid)
+        .update({ username });
 
     })
     .catch(function(error) {

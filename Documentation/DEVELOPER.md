@@ -9,3 +9,7 @@ http://stackoverflow.com/questions/38448800/this-operation-is-not-supported-in-t
 https://developers.facebook.com/apps/696898230474080/fb-login/
 
 https://github.com/erikras/react-redux-universal-hot-example/issues/252
+
+
+
+## React Native Component Life Cycle 
