@@ -1,7 +1,8 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Text } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
 import ExNavigator from '@exponent/react-native-navigator';
+import Emoji from 'react-native-emoji';
 import Routes from '../../config/routes';
 import images from '../../config/images';
 import styles from './styles';
@@ -10,7 +11,7 @@ class LoggedIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'Launch',
+      selectedTab: 'News',
     };
   }
 
@@ -25,12 +26,11 @@ class LoggedIn extends React.Component {
       <TabNavigator.Item
         selected={selectedTab === title}
         title={title}
-        renderIcon={() => <Image style={styles.icon} source={Icon} />}
+        renderIcon={() => <Text style={styles.icon}><Emoji name={Icon} /></Text>}
         renderSelectedIcon={() => (
-          <Image
-            style={[styles.icon, styles.iconSelected]}
-            source={Icon}
-          />
+          <Text style={[styles.icon, styles.iconSelected]}>
+            <Emoji name={Icon} />
+          </Text>
         )}
         onPress={() => this.setState({ selectedTab: title })}
       >
@@ -47,12 +47,12 @@ class LoggedIn extends React.Component {
   render() {
     return (
       <TabNavigator>
-        {this.renderTabItem('News', Routes.getNewsRoute(), images.icons.home)}
-        {this.renderTabItem('Stockpile', Routes.getStockpileRoute(), images.icons.home)}
-        {this.renderTabItem('Launch', Routes.getFriendsRoute(), images.icons.home)}
-        {this.renderTabItem('History', Routes.getHistoryRoute(), images.icons.profile)}
-        {this.renderTabItem('Profile', Routes.getProfileRoute(), images.icons.profile)}
-        
+        {this.renderTabItem('News', Routes.getNewsRoute(), 'newspaper')}
+        {this.renderTabItem('Stockpile', Routes.getStockpileRoute(), 'crossed_swords')}
+        {this.renderTabItem('Launch', Routes.getFriendsRoute(), 'rocket')}
+        {this.renderTabItem('History', Routes.getHistoryRoute(), 'world_map')}
+        {this.renderTabItem('Profile', Routes.getProfileRoute(), 'taco')}
+
       </TabNavigator>
     );
   }

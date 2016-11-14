@@ -23,6 +23,8 @@ export const routes = {
       getTitle() {
         return 'News';
       },
+      
+      showNavigationBar: false,
     };
   },
 
