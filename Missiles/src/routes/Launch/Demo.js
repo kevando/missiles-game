@@ -13,7 +13,6 @@ import MapView, { MAP_TYPES } from 'react-native-maps';
 import missileImg from '../../images/missileIcon.png';
 
 import Emoji from 'react-native-emoji';
-import _ from 'lodash';
 
 const { width, height } = Dimensions.get('window');
 
@@ -62,8 +61,6 @@ class Launch extends React.Component {
 
       zoomEnabled: true,
       scrollEnabled: true, // set to false after firing
-
-      weapon: null,
 
       currentRegion: {
         latitude: LATITUDE,
@@ -140,8 +137,6 @@ class Launch extends React.Component {
 
       }
     });
-
-
   }
 
   onRegionChange(region) {
@@ -176,8 +171,6 @@ class Launch extends React.Component {
           },
           distance: getDistance(e.nativeEvent.coordinate)
       });
-      // callout doesnt show up by default
-      // this.marker1.showCallout(); not working wtf whatever
     }
   }
 
@@ -244,17 +237,9 @@ class Launch extends React.Component {
     }).start();
   }
 
-  setDestination(){
-    this.setState({destination:true});
-  }
-
 
   render() {
     // console.log(this.state);
-
-    // no fucking clue why map wont work in the Callout
-    const availableWeapons = _.map(this.props.availableWeapons,(weapon,i) => {return (<Text key={i} onPress={(weapon) => this.onWeaponSelect}>{weapon.name}</Text>) })
-
     return (
       <View style={styles.container}>
         <MapView
@@ -284,18 +269,7 @@ class Launch extends React.Component {
           <MapView.Marker
             coordinate={this.state.targetMarker.coordinate}
             pinColor={this.state.targetMarker.color}
-            ref={ref => { this.marker1 = ref; }}
-
-          >
-            <MapView.Callout style={styles.plainView}  >
-
-              <View>
-                <Text style={{fontWeight:'700'}}><Emoji name="radio" /></Text>
-
-
-              </View>
-            </MapView.Callout>
-          </MapView.Marker>
+          />
         }
 
         {this.state.senderMarker &&
@@ -319,42 +293,18 @@ class Launch extends React.Component {
 
 
         <View style={styles.buttonContainer}>
-        {this.state.targetMarker && !this.state.launched && !this.state.weapon && !this.state.destination &&
+        {this.state.targetMarker && !this.state.launched &&
           <TouchableOpacity
-            onPress={this.setDestination.bind(this)}
+            onPress={this.fireMissile.bind(this)}
             style={[styles.bubble, styles.button]}
           >
-            <Text>Set Target Destination</Text>
+            <Text>Fire</Text>
           </TouchableOpacity>
           }
 
-          {this.state.targetMarker && !this.state.launched && !this.state.weapon && this.state.destination &&
-            
-            _.map(this.props.availableWeapons,(weapon,i) => {
-              return(
-                <TouchableOpacity key={i}
-                  onPress={() => this.setState({weapon: weapon})}
-                  style={[styles.bubble, styles.button]}
-                >
-                  <Text>{weapon.name}</Text>
-                </TouchableOpacity>
-              )
-            })
-
-            }
-
-          {this.state.targetMarker && !this.state.launched && this.state.weapon && this.state.destination &&
-            <TouchableOpacity
-              onPress={this.fireMissile.bind(this)}
-              style={[styles.bubble, styles.button]}
-            >
-              <Text>Fire</Text>
-            </TouchableOpacity>
-            }
-
         </View>
         <View style={styles.navContainer}>
-          <Text style={styles.distance}>Target Distance: {this.state.distance}</Text>
+          <Text style={styles.distance}>Distance Traveled: {this.state.distance}</Text>
         </View>
 
 
@@ -408,11 +358,7 @@ const styles = StyleSheet.create({
   },
   distance: {
     fontSize: 26
-  },
-  plainView: {
-    width: 160,
-    backgroundColor: 'yellow'
-  },
+  }
 });
 
 module.exports = Launch;

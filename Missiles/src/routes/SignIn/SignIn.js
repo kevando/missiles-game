@@ -24,6 +24,14 @@ const SignIn = (props) => {
         <Button text="Sign In as Kevin" onPress={() => logIn('kevin',playersRef)} />
       </View>
 
+      <View style={styles.buttons}>
+        <Button text="Sign In as Test" onPress={() => logIn('test',playersRef)} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Button text="Sign In as American" onPress={() => logIn('american',playersRef)} />
+      </View>
+
       <KeyboardSpacer />
     </View>
   );

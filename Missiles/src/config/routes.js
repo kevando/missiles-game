@@ -8,6 +8,7 @@ import Market from '../routes/Market';
 import Friends from '../routes/Friends';
 import Maps from '../routes/Maps';
 import Launch from '../routes/Launch';
+import History from '../routes/History';
 
 export const routes = {
 
@@ -86,6 +87,7 @@ export const routes = {
       getTitle() {
         return 'Choose your target';
       },
+      showNavigationBar: false,
     };
   },
 
@@ -93,17 +95,35 @@ export const routes = {
 
   // LAUNCH ROUTE
 
-  getLaunchRoute() {
+  getLaunchRoute(target, availableWeapons) {
     return {
       renderScene(navigator) {
-        return <Launch navigator={navigator} />;
+        return <Launch navigator={navigator} target={target} availableWeapons={availableWeapons} />;
       },
 
       getTitle() {
         return 'Find your target';
       },
 
-      showNavigationBar: false,
+      showNavigationBar: false, // gets inherited?
+    };
+  },
+
+  // --------------------------------------------------------------------
+
+  // HISTORY ROUTE
+
+  getHistoryRoute() {
+    return {
+      renderScene(navigator) {
+        return <History navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Missile History';
+      },
+
+      showNavigationBar: true,
     };
   },
 
