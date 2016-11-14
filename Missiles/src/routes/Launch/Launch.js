@@ -5,6 +5,7 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 
 import MapView, { MAP_TYPES } from 'react-native-maps';
@@ -38,7 +39,11 @@ class Launch extends React.Component {
 
       // markers: [],
       targetMarker: null,
-      senderMarker: null
+      senderMarker: null,
+
+      polylines: [],
+      editing: null,
+      flightPath: null,
     };
   }
 
@@ -59,13 +64,7 @@ class Launch extends React.Component {
     this.setState({ region });
   }
 
-  jumpRandom() {
-    this.setState({ region: this.randomRegion() });
-  }
 
-  animateRandom() {
-    this.map.animateToRegion(this.randomRegion());
-  }
 
   animateToHome() {
     this.map.animateToRegion(this.homeRegion());
@@ -83,14 +82,6 @@ class Launch extends React.Component {
     };
   }
 
-  randomRegion() {
-    const { region } = this.state;
-    return {
-      ...this.state.region,
-      latitude: region.latitude + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
-      longitude: region.longitude + ((Math.random() - 0.5) * (region.longitudeDelta / 2)),
-    };
-  }
 
   onMapPress(e) {
     console.log('coord',e.nativeEvent.coordinate)
@@ -103,9 +94,94 @@ class Launch extends React.Component {
     });
   }
 
+  setFlightPath() {
+    const { polylines, editing, senderMarker, targetMarker } = this.state;
+    this.setState({
+      flightPath: {
+        coordinates: [
+          senderMarker.coordinate,
+          targetMarker.coordinate
+        ]
+      },
+    });
+  }
 
+  finish() {
+    const { polylines, editing } = this.state;
+    this.setState({
+      polylines: [...polylines, editing],
+      editing: null,
+    });
+  }
+
+  onPanDrag(e) {
+    const { editing } = this.state;
+    if (!editing) {
+      this.setState({
+        editing: {
+          id: id++,
+          coordinates: [e.nativeEvent.coordinate],
+        },
+      });
+    } else {
+      this.setState({
+        editing: {
+          ...editing,
+          coordinates: [
+            ...editing.coordinates,
+            e.nativeEvent.coordinate,
+          ],
+        },
+      });
+    }
+  }
+
+  render_polyline() {
+
+    return (
+      <View style={styles.container}>
+        <MapView
+          provider={this.props.provider}
+          style={styles.map}
+          initialRegion={this.state.region}
+          scrollEnabled={false}
+          onPanDrag={e => this.onPanDrag(e)}
+        >
+          {this.state.polylines.map(polyline => (
+            <MapView.Polyline
+              key={polyline.id}
+              coordinates={polyline.coordinates}
+              strokeColor="#000"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={1}
+            />
+          ))}
+          {this.state.editing &&
+            <MapView.Polyline
+              key="editingPolyline"
+              coordinates={this.state.editing.coordinates}
+              strokeColor="#F00"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={1}
+            />
+          }
+        </MapView>
+        <View style={styles.buttonContainer}>
+          {this.state.editing && (
+            <TouchableOpacity
+              onPress={() => this.finish()}
+              style={[styles.bubble, styles.button]}
+            >
+              <Text>Finish</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    );
+  }
 
   render() {
+    console.log(this.state);
     return (
       <View style={styles.container}>
         <MapView
@@ -132,6 +208,16 @@ class Launch extends React.Component {
           />
           : null}
 
+          {this.state.flightPath &&
+            <MapView.Polyline
+              key="flightPathPolyline"
+              coordinates={this.state.flightPath.coordinates}
+              strokeColor="#F00"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={1}
+            />
+          }
+
         </MapView>
 
         <View style={[styles.bubble, styles.latlng]}>
@@ -147,12 +233,21 @@ class Launch extends React.Component {
           >
             <Text>Jump</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => this.animateToHome()}
             style={[styles.bubble, styles.button]}
           >
             <Text>Animate</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => this.setFlightPath()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text>Set Path</Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     );
