@@ -36,7 +36,6 @@ The constructor is the right place to initialize state. If you don't initialize 
 ##### componentWillMount()
 componentWillMount() is invoked immediately before mounting occurs. It is called before render(), therefore setting state in this method will not trigger a re-rendering. Avoid introducing any side-effects or subscriptions in this method.
 
-This is the only lifecycle hook called on server rendering. Generally, we recommend using the constructor() instead.
 
 ##### componentDidMount()
 componentDidMount()

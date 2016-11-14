@@ -6,6 +6,8 @@ import Profile from '../routes/Profile';
 import SignIn from '../routes/SignIn';
 import Market from '../routes/Market';
 import Friends from '../routes/Friends';
+import Maps from '../routes/Maps';
+import Launch from '../routes/Launch';
 
 export const routes = {
 
@@ -87,6 +89,31 @@ export const routes = {
     };
   },
 
+  // --------------------------------------------------------------------
+
+  // LAUNCH ROUTE
+
+  getLaunchRoute() {
+    return {
+      renderScene(navigator) {
+        return <Launch navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Find your target';
+      },
+    };
+  },
+
+  getMapsRoute() {
+    return {
+      renderScene(navigator) {
+        return <Maps navigator={navigator} />;
+      },
+
+      showNavigationBar: false,
+    };
+  },
   getProfileRoute() {
     return {
       renderScene(navigator) {
