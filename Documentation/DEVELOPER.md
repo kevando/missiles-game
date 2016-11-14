@@ -30,24 +30,10 @@ https://github.com/erikras/react-redux-universal-hot-example/issues/252
 
 
 ##### constructor(props)
-The constructor for a React component is called before it is mounted. When implementing the constructor for a React.Component subclass, you should call super(props) before any other statement. Otherwise, this.props will be undefined in the constructor, which can lead to bugs.
 
 The constructor is the right place to initialize state. If you don't initialize state and you don't bind methods, you don't need to implement a constructor for your React component.
 
-It's okay to initialize state based on props if you know what you're doing. Here's an example of a valid React.Component subclass constructor:
-
-constructor(props) {
-  super(props);
-  this.state = {
-    color: props.initialColor
-  };
-}  
-Beware of this pattern, as it effectively "forks" the props and can lead to bugs. Instead of syncing props to state, you often want to lift the state up.
-
-If you "fork" props by using them for state, you might also want to implement componentWillReceiveProps(nextProps) to keep the state up-to-date with them. But lifting state up is often easier and less bug-prone.
-
 ##### componentWillMount()
-componentWillMount()
 componentWillMount() is invoked immediately before mounting occurs. It is called before render(), therefore setting state in this method will not trigger a re-rendering. Avoid introducing any side-effects or subscriptions in this method.
 
 This is the only lifecycle hook called on server rendering. Generally, we recommend using the constructor() instead.

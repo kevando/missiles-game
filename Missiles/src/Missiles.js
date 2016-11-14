@@ -76,7 +76,7 @@ class Missiles extends Component {
 
 
     // if (!connected || players.length <= 0 ) {
-      if (!connected || !initialized) {
+      if (!connected ) {
       return <Loading />;
 
     } else if (user.username) {

@@ -10,7 +10,7 @@ class LoggedIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'Stockpile',
+      selectedTab: 'Friends',
     };
   }
 
@@ -49,6 +49,7 @@ class LoggedIn extends React.Component {
       <TabNavigator>
         {this.renderTabItem('News', Routes.getNewsRoute(), images.icons.home)}
         {this.renderTabItem('Market', Routes.getMarketRoute(), images.icons.home)}
+        {this.renderTabItem('Friends', Routes.getFriendsRoute(), images.icons.home)}
         {this.renderTabItem('Stockpile', Routes.getStockpileRoute(), images.icons.home)}
         {this.renderTabItem('Profile', Routes.getProfileRoute(), images.icons.profile)}
       </TabNavigator>

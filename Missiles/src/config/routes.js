@@ -5,6 +5,7 @@ import Welcome from '../routes/Welcome';
 import Profile from '../routes/Profile';
 import SignIn from '../routes/SignIn';
 import Market from '../routes/Market';
+import Friends from '../routes/Friends';
 
 export const routes = {
 
@@ -66,6 +67,22 @@ export const routes = {
 
       getTitle() {
         return 'Market Place';
+      },
+    };
+  },
+
+  // --------------------------------------------------------------------
+
+  // FRIENDS ROUTE (Pre Launch)
+
+  getFriendsRoute() {
+    return {
+      renderScene(navigator) {
+        return <Friends navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Choose your target';
       },
     };
   },
