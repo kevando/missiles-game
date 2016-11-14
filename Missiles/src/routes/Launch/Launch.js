@@ -10,43 +10,74 @@ import {
 
 import MapView, { MAP_TYPES } from 'react-native-maps';
 
+import missileImg from '../../images/missileIcon.png';
+
+import Emoji from 'react-native-emoji';
+
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922; // Zoom level?
+
+
+// cincy
+const LATITUDE = 39.103197;
+const LONGITUDE = -84.506488;
+
+const LATITUDE_DELTA = 0.922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-let id = 0;
+const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
+const SPACE = 0.01;
 
-function randomColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+
+// function getDistance(lat1, lon1, lat2, lon2) {
+function getDistance(destinationCoordinate) {
+
+  var lat1 = destinationCoordinate.latitude;
+  var lon1 = destinationCoordinate.longitude;
+  var lat2 = LATITUDE;
+  var lon2 = LONGITUDE;
+
+  var p = 0.017453292519943295;    // Math.PI / 180
+  var c = Math.cos;
+  var a = 0.5 - c((lat2 - lat1) * p)/2 +
+          c(lat1 * p) * c(lat2 * p) *
+          (1 - c((lon2 - lon1) * p))/2;
+
+  const distance = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+
+  return Math.round(distance * 100) / 100 // round to nearest 1000th
 }
-
 
 class Launch extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      region: {
+
+      launched: false,
+      distance: 'unknown',
+
+      zoomEnabled: true,
+      scrollEnabled: true, // set to false after firing
+
+      currentRegion: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
 
-      // markers: [],
+
       targetMarker: null,
 
-      someCoordinate: new MapView.AnimatedRegion({
+      missileCoordinate: new MapView.AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE,
       }),
 
-      someMarker: null,
-
+      missileMarker: null,
 
       senderMarker: {
         coordinate: {
@@ -62,6 +93,32 @@ class Launch extends React.Component {
   }
 
   componentDidMount() {
+
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => {
+    //    console.log('getCurrentPosition',position);
+    //     this.setState({currentRegion: {
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //       latitudeDelta: LATITUDE_DELTA,
+    //       longitudeDelta: LONGITUDE_DELTA,
+    //     }});
+    //   },
+    //   (error) => alert(error.message),
+    //   {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    // );
+    // this.watchID = navigator.geolocation.watchPosition((position) => {
+    //    console.log('watchPosition',position);
+    //   this.setState({currentRegion: {
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //       latitudeDelta: LATITUDE_DELTA,
+    //       longitudeDelta: LONGITUDE_DELTA,
+    //     }});
+    //
+    // })
+
+
     this.setState({
       senderMarker: {
           coordinate: {
@@ -71,9 +128,13 @@ class Launch extends React.Component {
           // key: id++,
           color: 'blue',
         },
-      someMarker: {
-        coordinate: this.state.someCoordinate,
-        color: 'purple'
+      // someMarker: {
+      //   coordinate: this.state.someCoordinate,
+      //   color: 'purple'
+      // },
+      missileMarker: {
+        coordinate: this.state.missileCoordinate,
+
       }
     });
   }
@@ -92,7 +153,7 @@ class Launch extends React.Component {
     // alert('asdf')
     const { region, targetMarker } = this.state;
     return {
-      ...this.state.region,
+      // ...this.state.region,
       latitude: targetMarker.coordinate.latitude,// + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
       longitude: targetMarker.coordinate.longitude,// + ((Math.random() - 0.5) * (region.longitudeDelta / 2)),
       // latitudeDelta: region.latitudeDelta + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
@@ -102,24 +163,25 @@ class Launch extends React.Component {
 
 
   onMapPress(e) {
-    console.log('coord',e.nativeEvent.coordinate)
-    this.setState({
-      targetMarker: {
-          coordinate: e.nativeEvent.coordinate,
-          // key: id++,
-          color: 'red',
-        },
-    });
+    if(!this.state.launched){
+      this.setState({
+        targetMarker: {
+            coordinate: e.nativeEvent.coordinate,
+            color: 'red',
+          },
+          distance: getDistance(e.nativeEvent.coordinate)
+      });
+    }
   }
 
   setFlightPath() {
     const { polylines, editing, senderMarker, targetMarker } = this.state;
 
-    this.state.someMarker.coordinate.timing({
-      latitude: this.state.targetMarker.coordinate.latitude,
-      longitude: this.state.targetMarker.coordinate.longitude,
-      duration: 5000
-    }).start();
+    // this.state.someMarker.coordinate.timing({
+    //   latitude: this.state.targetMarker.coordinate.latitude,
+    //   longitude: this.state.targetMarker.coordinate.longitude,
+    //   duration: 5000
+    // }).start();
 
     //
     this.setState({
@@ -132,36 +194,37 @@ class Launch extends React.Component {
     });
   }
 
-  finish() {
-    const { polylines, editing } = this.state;
-    this.setState({
-      polylines: [...polylines, editing],
-      editing: null,
+
+  fireMissile() {
+    // this.map.animateToRegion(this.homeRegion(),5000); // lags
+
+    this.fitMarkers();
+
+    this.setState({launched: true, zoomEnabled: false, scrollEnabled: false});
+
+
+    // return;
+
+
+    this.state.missileMarker.coordinate.timing({
+      latitude: this.state.targetMarker.coordinate.latitude,
+      longitude: this.state.targetMarker.coordinate.longitude,
+      duration: 5000,
+      delay: 3000
+    }).start(this.setFlightPath.bind(this));
+
+    this.state.missileMarker.coordinate.addListener((coordinate) => this.setState({distance: getDistance(coordinate)}));
+
+
+  }
+
+  fitMarkers() {
+    this.map.fitToCoordinates([this.state.senderMarker.coordinate, this.state.targetMarker.coordinate], {
+      edgePadding: DEFAULT_PADDING,
+      animated: true,
+
     });
   }
-
-  onPanDrag(e) {
-    const { editing } = this.state;
-    if (!editing) {
-      this.setState({
-        editing: {
-          id: id++,
-          coordinates: [e.nativeEvent.coordinate],
-        },
-      });
-    } else {
-      this.setState({
-        editing: {
-          ...editing,
-          coordinates: [
-            ...editing.coordinates,
-            e.nativeEvent.coordinate,
-          ],
-        },
-      });
-    }
-  }
-
 
 
 
@@ -176,7 +239,7 @@ class Launch extends React.Component {
 
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <View style={styles.container}>
         <MapView
@@ -184,24 +247,37 @@ class Launch extends React.Component {
           ref={ref => { this.map = ref; }}
           mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
-          initialRegion={this.state.region}
+          initialRegion={this.state.currentRegion}
           onRegionChange={region => this.onRegionChange(region)}
           onPress={(e) => this.onMapPress(e)}
           showsUserLocation={true}
+          zoomEnabled={this.state.zoomEnabled}
+          scrollEnabled={this.state.scrollEnabled}
+          pitchEnabled={true}
+          rotateEnabled={false}
+
         >
 
-        {this.state.someMarker ?
+        {this.state.launched &&
           <MapView.Marker.Animated
-            coordinate={this.state.someMarker.coordinate}
-            pinColor={this.state.someMarker.color}
+            coordinate={this.state.missileMarker.coordinate}
+            image={missileImg}
+
           />
-          : null}
-        {this.state.targetMarker ?
+        }
+        {this.state.targetMarker &&
           <MapView.Marker
             coordinate={this.state.targetMarker.coordinate}
             pinColor={this.state.targetMarker.color}
           />
-          : null}
+        }
+
+        {this.state.senderMarker &&
+          <MapView.Marker
+            coordinate={this.state.senderMarker.coordinate}
+            pinColor={this.state.senderMarker.color}
+          />
+        }
 
           {this.state.flightPath &&
             <MapView.Polyline
@@ -209,41 +285,30 @@ class Launch extends React.Component {
               coordinates={this.state.flightPath.coordinates}
               strokeColor="#F00"
               fillColor="rgba(255,0,0,0.5)"
-              strokeWidth={1}
+              strokeWidth={3}
             />
           }
 
         </MapView>
 
-        <View style={[styles.bubble, styles.latlng]}>
-          <Text style={{ textAlign: 'center' }}>
-            {this.state.region.latitude.toPrecision(7)},
-            {this.state.region.longitude.toPrecision(7)}
-          </Text>
-        </View>
+
         <View style={styles.buttonContainer}>
+        {this.state.targetMarker && !this.state.launched &&
           <TouchableOpacity
-            onPress={this.setCoordinateAnimated.bind(this)}
+            onPress={this.fireMissile.bind(this)}
             style={[styles.bubble, styles.button]}
           >
-            <Text>Animate marker</Text>
+            <Text>Fire</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => this.animateToHome()}
-            style={[styles.bubble, styles.button]}
-          >
-            <Text>Animate</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => this.setFlightPath()}
-            style={[styles.bubble, styles.button]}
-          >
-            <Text>Set Path</Text>
-          </TouchableOpacity>
+          }
 
         </View>
+        <View style={styles.navContainer}>
+          <Text style={styles.distance}>Distance Traveled: {this.state.distance}</Text>
+        </View>
+
+
+
       </View>
     );
   }
@@ -277,12 +342,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: 'center',
     marginHorizontal: 10,
+    backgroundColor: 'red',
+
   },
   buttonContainer: {
     flexDirection: 'row',
     marginVertical: 20,
     backgroundColor: 'transparent',
   },
+  navContainer: {
+    flexDirection: 'column',
+    marginVertical: 20,
+    backgroundColor: '#fff',
+    // flex:1,
+  },
+  distance: {
+    fontSize: 26
+  }
 });
 
 module.exports = Launch;

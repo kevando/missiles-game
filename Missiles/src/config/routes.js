@@ -102,6 +102,8 @@ export const routes = {
       getTitle() {
         return 'Find your target';
       },
+
+      showNavigationBar: false,
     };
   },
 
