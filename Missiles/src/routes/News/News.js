@@ -5,9 +5,15 @@ import Button from '../../components/Button';
 import styles from './styles';
 
 import Emoji from 'react-native-emoji';
+import _ from 'lodash';
 
 const News = (props) => {
-  const { updateState, logIn, } = props;
+  const { players } = props;
+
+  var n00b = _.maxBy(players, 'createdAt');
+  var topDawg = _.maxBy(players, (p) => { return p.score.frags; });
+
+  // alert(topDawg.username);
 
   return (
     <View style={styles.container}>
@@ -25,14 +31,9 @@ const News = (props) => {
 
 
         <View style={styles.content}>
-          <Text style={styles.contentTitle}>CORRUPTION SCANDAL REACHES {"\n"}SKY {"\n"}HIGH {"\n"}LIMITS</Text>
+          <Text style={styles.contentTitle}>CAN ANYONE STOP {topDawg.username.toUpperCase()}?? {"\n"}<Emoji name="fire" /><Emoji name="fire" /><Emoji name="fire" /></Text>
           <Text style={styles.faceEmoji}><Emoji name="scream_cat" /></Text>
         </View>
-
-
-
-
-
 
 
       </View>
@@ -42,8 +43,8 @@ const News = (props) => {
 
 
         <View style={styles.footerTop}>
-          <Text style={styles.footerTitle}>Wont somebody think of the children?</Text>
-          <Text style={styles.footerEmojis}><Emoji name="baby" /><Emoji name="baby" /><Emoji name="robot_face" /><Emoji name="baby" /></Text>
+          <Text style={styles.footerTitle}>{n00b.username.toUpperCase()} is charged up and ready</Text>
+          <Text style={styles.footerEmojis}><Emoji name="battery" /><Emoji name="electric_plug" /><Emoji name="crystal_ball" /><Emoji name="hole" /></Text>
         </View>
 
         <View style={styles.footer}>

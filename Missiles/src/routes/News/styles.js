@@ -96,6 +96,7 @@ export default StyleSheet.create({
     borderColor: 'black',
     borderWidth:5,
     marginHorizontal: 5,
+    paddingHorizontal: 15,
     marginBottom: 10,
     flex: 1,
     backgroundColor: 'transparent',
@@ -104,7 +105,7 @@ export default StyleSheet.create({
   },
   contentTitle: {
     color: '#FFE700',
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: '900',
     fontFamily: 'Avenir Next',
     textAlign: 'left',
@@ -120,7 +121,7 @@ export default StyleSheet.create({
     },
     textShadowRadius: 10,
     textShadowColor: '#000',
-    lineHeight: 40
+    lineHeight: 50
 
   },
 
@@ -164,7 +165,7 @@ export default StyleSheet.create({
 
   footerTitle: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: '500',
     fontFamily: 'Courier',
     textAlign: 'center',
