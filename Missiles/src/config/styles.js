@@ -6,4 +6,7 @@ export const colors = {
   buttonText: '#FFFFFF',
   inputBackground: '#FFFFFF',
   inputDivider: '#E4E2E5',
+
+  black: '#444',
+
 };

@@ -13,9 +13,13 @@ import {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import {
+  WeaponsActions,
+} from './actions';
 
 import * as appActions from './actions/app'; //
 import * as playersActions from './actions/players';
+
 
 import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
@@ -45,27 +49,34 @@ class Missiles extends Component {
 
   componentDidUpdate(prevProps, prevState) {
 
-    const { connected, authData, playersActions, playersRef  } = this.props;
+    const { connected, authData } = this.props;
     const { appInitialized } = this.state;
 
     if(connected && authData.uid && !appInitialized ) {
       // We know the user is authorized, so lets grab data!
-
-      this.setState({appInitialized: true});
-
-      playersActions.listenForPlayers(playersRef);
-      // Probably more listeners will go here
-
+      this._initializeApp();
     }
+
+  }
+  _initializeApp() {
+
+    const { playersActions, playersRef, weaponsActions, } = this.props;
+
+    this.setState({appInitialized: true});
+
+    playersActions.listenForPlayers(playersRef);
+    weaponsActions.listenForWeapons();
+
 
   }
 
 
   render() {
-    const { connected, authData, user } = this.props;
-    console.log('Missile props',this.props);
+    const { connected, authData, user, players } = this.props;
 
-    if (!connected) {
+
+    // if (!connected || players.length <= 0 ) {
+      if (!connected ) {
       return <Loading />;
 
     } else if (user.username) {
@@ -86,7 +97,9 @@ function mapStateToProps(state) {
     authData: state.app.authData,
     user: state.app.user,
     connectedRef: state.firebase.connectedRef,
-    playersRef: state.firebase.playersRef
+    playersRef: state.firebase.playersRef,
+    players: state.players,
+    missilesRef: state.firebase.dataRef.child('missiles'),
   }
 }
 
@@ -94,6 +107,7 @@ function mapDispatchToProps(dispatch) {
   return {
     appActions: bindActionCreators(appActions, dispatch),
     playersActions: bindActionCreators(playersActions, dispatch),
+    weaponsActions: bindActionCreators(WeaponsActions, dispatch),
   }
 }
 

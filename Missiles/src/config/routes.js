@@ -4,6 +4,7 @@ import News from '../routes/News';
 import Welcome from '../routes/Welcome';
 import Profile from '../routes/Profile';
 import SignIn from '../routes/SignIn';
+import Market from '../routes/Market';
 
 export const routes = {
 
@@ -52,17 +53,23 @@ export const routes = {
       },
     };
   },
-  getDetailsRoute() {
+
+  // --------------------------------------------------------------------
+
+  // MARKET ROUTE
+
+  getMarketRoute() {
     return {
       renderScene(navigator) {
-        return <Details navigator={navigator} />;
+        return <Market navigator={navigator} />;
       },
 
       getTitle() {
-        return 'Details';
+        return 'Market Place';
       },
     };
   },
+
   getProfileRoute() {
     return {
       renderScene(navigator) {

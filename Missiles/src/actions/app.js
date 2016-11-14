@@ -5,6 +5,7 @@ export const CONNECTION_ONLINE = 'CONNECTION_ONLINE';
 export const CONNECTION_OFFLINE = 'CONNECTION_OFFLINE';
 export const SET_AUTH_DATA = 'SET_AUTH_DATA';
 export const UPDATE_PLAYER = 'UPDATE_PLAYER';
+export const USER_LOG_OUT = 'USER_LOG_OUT';
 
 
 import firebase from 'firebase';
@@ -39,8 +40,6 @@ export function listenForAuthChanges(playersRef) {
       if(authData) {
         dispatch({ type: SET_AUTH_DATA, authData });
 
-
-
         // dispatch({ type: UPDATE_PLAYER, authData });
         // updateState({authData});
         // setUser(authData);
@@ -48,7 +47,7 @@ export function listenForAuthChanges(playersRef) {
         // startLocationTracking();
       } else {
         // This will clear the user object and redirect user to signIn page
-        dispatch({ type: SET_AUTH_DATA, authData: {} });
+        dispatch({ type: USER_LOG_OUT });
       }
     });
 

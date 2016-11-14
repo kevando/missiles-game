@@ -7,12 +7,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as playersActions from '../../actions/players';
 
-function mapStateToProps({missiles, app, players}) {
+function mapStateToProps({weapons, app, players}) {
   return {
-    // probly some loggingIn state info
-    // connectionChecked: state.items.connectionChecked,
-    missiles: missiles,
-    authData: app.authData,
+    
+    weapons,
+    user: app.user,
     players
 
   }

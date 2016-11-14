@@ -19,6 +19,7 @@ const dataRef = firebaseApp.database().ref(`${VERSION}`);
 const itemsRef = firebaseApp.database().ref(`${VERSION}/items`);
 const logsRef = firebaseApp.database().ref(`${VERSION}/logs`);
 const playersRef = firebaseApp.database().ref(`${VERSION}/players`);
+
 const connectedRef = firebaseApp.database().ref('.info/connected');
 
 
@@ -28,6 +29,7 @@ const initialState = {
   logsRef,
   connectedRef,
   playersRef,
+
 }
 
 export default function reducer(state = initialState, action) {

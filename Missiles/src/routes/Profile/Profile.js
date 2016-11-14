@@ -8,6 +8,7 @@ import styles from './styles';
 
 const Profile = (props) => {
   const { user, logOut } = props;
+
   let username;
 
 

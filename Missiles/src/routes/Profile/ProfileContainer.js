@@ -6,16 +6,16 @@ import Profile from './Profile';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as appActions from '../../actions/app'
+import { AppActions } from '../../actions';
 
-function mapStateToProps(state) {
+function mapStateToProps({app}) {
   return {
-    user: state.user,
+    user: app.user,
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(appActions, dispatch)
+  return bindActionCreators(AppActions, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

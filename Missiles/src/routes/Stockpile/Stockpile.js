@@ -1,38 +1,33 @@
 import React, { Component } from 'react';
 import { Text, View, Image } from 'react-native';
 
-import Missile from '../../components/MissileListItem';
+import { MyWeapon } from '../../components/Weapons';
+import Button from '../../components/Button';
 import styles from './styles';
+import Routes from '../../config/routes'; // put this in redux?
 
 import _ from 'lodash';
 
 
 class Stockpile extends Component {
 
-  constructor(props) {
-    super(props);
-
-  }
-  componentDidMount() {
-
-    // this is a hack for now
-    // eventually current player should be more globally available
-
-
-
-  }
 
   render() {
-    const { authData,players } = this.props;
-
-    // THIS IS TMP
-    // const player = _.find(players,{uid: authData.uid});
+    const { user, navigator } = this.props;
 
     return (
       <View style={styles.container}>
 
+      {
+        _.map(user.weapons,(weapon,i) => {
+          return <MyWeapon weapon={weapon} key={i} />
+        })
+      }
 
-        <Text>{players.length}</Text>
+        <View style={styles.buttons} >
+          <Button text="Shop Market" onPress={() => navigator.push(Routes.getMarketRoute()) } />
+        </View>
+
 
 
       </View>

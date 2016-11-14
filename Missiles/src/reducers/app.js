@@ -2,6 +2,7 @@ import {
   CONNECTION_ONLINE,
   CONNECTION_OFFLINE,
   SET_AUTH_DATA,
+  USER_LOG_OUT,
 } from '../actions/app';
 
 import {
@@ -12,15 +13,15 @@ const initialState = {
   connectionChecked: false,
   connected: false,
   user: {
-    username: 'douche',
+    username: null, // app init process requires this to start out as null
     uid: null,
     pushToken: null,
     location: null,
     notifications: false,
     missiles: [],
-    coins: 0
+    balance: 0
   },
-  authData: {}
+  authData: false
 };
 
 export default function reducer(app = initialState, action) {
@@ -28,17 +29,34 @@ export default function reducer(app = initialState, action) {
   switch (action.type) {
 
     case SET_AUTH_DATA:
+      const {authData} = action;
 
       return {
         ...app,
-        authData: action.authData,
+        authData,
+        user: {
+          ...app.user,
+          uid: authData.uid
+        }
+      }
+
+    case USER_LOG_OUT:
+      // const {authData} = action;
+
+      return {
+        ...app,
+        authData: false,
+        user: {}
       }
 
     case SET_PLAYER_AS_USER:
 
       return {
         ...app,
-        user: action.player
+        user: {
+          ...app.user,
+          ...action.player
+        }
       }
       // user: {
       //   ...app.user,
