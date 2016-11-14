@@ -3,9 +3,10 @@ import offline from 'react-native-simple-store'
 
 export const CONNECTION_ONLINE = 'CONNECTION_ONLINE';
 export const CONNECTION_OFFLINE = 'CONNECTION_OFFLINE';
-export const SET_AUTH_DATA = 'SET_AUTH_DATA';
 export const UPDATE_PLAYER = 'UPDATE_PLAYER';
-export const USER_LOG_OUT = 'USER_LOG_OUT';
+export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
+export const USER_LOGGING_IN = 'USER_LOGGING_IN';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 
 
 import firebase from 'firebase';
@@ -38,7 +39,7 @@ export function listenForAuthChanges(playersRef) {
     firebase.auth().onAuthStateChanged(function(authData) {
 
       if(authData) {
-        dispatch({ type: SET_AUTH_DATA, authData });
+        dispatch({ type: USER_LOGGED_IN, authData });
 
         // dispatch({ type: UPDATE_PLAYER, authData });
         // updateState({authData});
@@ -47,7 +48,7 @@ export function listenForAuthChanges(playersRef) {
         // startLocationTracking();
       } else {
         // This will clear the user object and redirect user to signIn page
-        dispatch({ type: USER_LOG_OUT });
+        dispatch({ type: USER_LOGGED_OUT });
       }
     });
 
@@ -57,6 +58,8 @@ export function listenForAuthChanges(playersRef) {
 
 export function logIn(username,playersRef) {
   return dispatch => {
+    dispatch({ type: USER_LOGGING_IN });
+
     var email = username+"@kevinhabich.com"; // tmp
     var password = "12345678"; // tmp
 

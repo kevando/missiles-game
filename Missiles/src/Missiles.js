@@ -72,11 +72,11 @@ class Missiles extends Component {
 
 
   render() {
-    const { connected, authData, user, players } = this.props;
+    const { connected, authData, user, players, initialized } = this.props;
 
 
     // if (!connected || players.length <= 0 ) {
-      if (!connected ) {
+      if (!connected || !initialized) {
       return <Loading />;
 
     } else if (user.username) {
@@ -100,6 +100,7 @@ function mapStateToProps(state) {
     playersRef: state.firebase.playersRef,
     players: state.players,
     missilesRef: state.firebase.dataRef.child('missiles'),
+    initialized: state.app.initialized,
   }
 }
 

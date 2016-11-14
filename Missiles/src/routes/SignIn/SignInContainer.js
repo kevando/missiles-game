@@ -10,6 +10,7 @@ import * as appActions from '../../actions/app'
 function mapStateToProps(state) {
   return {
     playersRef: state.firebase.playersRef,
+    loggingIn: state.app.loggingIn,
   }
 }
 

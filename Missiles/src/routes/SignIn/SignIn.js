@@ -7,13 +7,17 @@ import styles from './styles';
 
 const SignIn = (props) => {
 
-  const { logIn, playersRef } = props;
+  const { logIn, playersRef, loggingIn } = props;
 
   return (
     <View style={styles.container}>
 
       <View style={styles.header}>
         <Text style={styles.headerText}>Missiles</Text>
+      </View>
+
+      <View style={styles.buttons}>
+        <Text>{ loggingIn ? 'Logging in..' : null }</Text>
       </View>
 
       <View style={styles.buttons}>

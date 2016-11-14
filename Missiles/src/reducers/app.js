@@ -2,11 +2,14 @@ import {
   CONNECTION_ONLINE,
   CONNECTION_OFFLINE,
   SET_AUTH_DATA,
-  USER_LOG_OUT,
+  USER_LOGGED_OUT,
+  USER_LOGGED_IN,
+  USER_LOGGING_IN,
 } from '../actions/app';
 
 import {
   SET_PLAYER_AS_USER,
+  APP_INITIALIZED,
 } from '../actions/players';
 
 const initialState = {
@@ -21,6 +24,8 @@ const initialState = {
     missiles: [],
     balance: 0
   },
+  loggingIn: false,
+  initialized: false,
   authData: false
 };
 
@@ -28,24 +33,37 @@ export default function reducer(app = initialState, action) {
 
   switch (action.type) {
 
-    case SET_AUTH_DATA:
+    case APP_INITIALIZED:
+      return {
+        ...app,
+        initialized: true,
+      }
+
+    case USER_LOGGED_IN:
       const {authData} = action;
 
       return {
         ...app,
         authData,
+        loggingIn: false,
         user: {
           ...app.user,
           uid: authData.uid
         }
       }
 
-    case USER_LOG_OUT:
+    case USER_LOGGING_IN:
+      return {
+        ...app,
+        loggingIn: true,
+      }
+
+    case USER_LOGGED_OUT:
       // const {authData} = action;
 
       return {
         ...app,
-        authData: false,
+        authData: {},
         user: {}
       }
 
