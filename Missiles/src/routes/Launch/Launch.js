@@ -39,7 +39,21 @@ class Launch extends React.Component {
 
       // markers: [],
       targetMarker: null,
-      senderMarker: null,
+
+      someCoordinate: new MapView.AnimatedRegion({
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+      }),
+
+      someMarker: null,
+
+
+      senderMarker: {
+        coordinate: {
+          latitude: LATITUDE,
+          longitude: LONGITUDE,
+        }
+      },
 
       polylines: [],
       editing: null,
@@ -57,6 +71,10 @@ class Launch extends React.Component {
           // key: id++,
           color: 'blue',
         },
+      someMarker: {
+        coordinate: this.state.someCoordinate,
+        color: 'purple'
+      }
     });
   }
 
@@ -96,6 +114,14 @@ class Launch extends React.Component {
 
   setFlightPath() {
     const { polylines, editing, senderMarker, targetMarker } = this.state;
+
+    this.state.someMarker.coordinate.timing({
+      latitude: this.state.targetMarker.coordinate.latitude,
+      longitude: this.state.targetMarker.coordinate.longitude,
+      duration: 5000
+    }).start();
+
+    //
     this.setState({
       flightPath: {
         coordinates: [
@@ -136,49 +162,18 @@ class Launch extends React.Component {
     }
   }
 
-  render_polyline() {
 
-    return (
-      <View style={styles.container}>
-        <MapView
-          provider={this.props.provider}
-          style={styles.map}
-          initialRegion={this.state.region}
-          scrollEnabled={false}
-          onPanDrag={e => this.onPanDrag(e)}
-        >
-          {this.state.polylines.map(polyline => (
-            <MapView.Polyline
-              key={polyline.id}
-              coordinates={polyline.coordinates}
-              strokeColor="#000"
-              fillColor="rgba(255,0,0,0.5)"
-              strokeWidth={1}
-            />
-          ))}
-          {this.state.editing &&
-            <MapView.Polyline
-              key="editingPolyline"
-              coordinates={this.state.editing.coordinates}
-              strokeColor="#F00"
-              fillColor="rgba(255,0,0,0.5)"
-              strokeWidth={1}
-            />
-          }
-        </MapView>
-        <View style={styles.buttonContainer}>
-          {this.state.editing && (
-            <TouchableOpacity
-              onPress={() => this.finish()}
-              style={[styles.bubble, styles.button]}
-            >
-              <Text>Finish</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-    );
+
+
+  setCoordinateAnimated() {
+    // alert('animate marker');
+    this.state.someMarker.coordinate.timing({
+      latitude: this.state.targetMarker.coordinate.latitude,
+      longitude: this.state.targetMarker.coordinate.longitude,
+      duration: 5000
+    }).start();
   }
+
 
   render() {
     console.log(this.state);
@@ -195,10 +190,10 @@ class Launch extends React.Component {
           showsUserLocation={true}
         >
 
-        {this.state.senderMarker ?
-          <MapView.Marker
-            coordinate={this.state.senderMarker.coordinate}
-            pinColor={this.state.senderMarker.color}
+        {this.state.someMarker ?
+          <MapView.Marker.Animated
+            coordinate={this.state.someMarker.coordinate}
+            pinColor={this.state.someMarker.color}
           />
           : null}
         {this.state.targetMarker ?
@@ -228,10 +223,10 @@ class Launch extends React.Component {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={() => this.jumpRandom()}
+            onPress={this.setCoordinateAnimated.bind(this)}
             style={[styles.bubble, styles.button]}
           >
-            <Text>Jump</Text>
+            <Text>Animate marker</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

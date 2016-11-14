@@ -191,7 +191,7 @@ class AnimatedViews extends React.Component {
       scale,
       translateY,
       markers,
-      region: new Animated.Region({
+      region: new MapView.AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
@@ -203,8 +203,8 @@ class AnimatedViews extends React.Component {
   componentDidMount() {
     const { region, panX, panY, scrollX, markers } = this.state;
 
-    panX.addListener(this.onPanXChange);
-    panY.addListener(this.onPanYChange);
+    panX.addListener(this.onPanXChange.bind(this));
+    panY.addListener(this.onPanYChange.bind(this));
 
     region.stopAnimation();
     region.timing({
@@ -321,8 +321,8 @@ class AnimatedViews extends React.Component {
           xBounds={[-screen.width * (markers.length - 1), 0]}
           panY={panY}
           panX={panX}
-          onStartShouldSetPanResponder={this.onStartShouldSetPanResponder}
-          onMoveShouldSetPanResponder={this.onMoveShouldSetPanResponder}
+          onStartShouldSetPanResponder={this.onStartShouldSetPanResponder.bind(this)}
+          onMoveShouldSetPanResponder={this.onMoveShouldSetPanResponder.bind(this)}
         >
           <MapView.Animated
             provider={this.props.provider}
