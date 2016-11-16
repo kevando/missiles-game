@@ -7,6 +7,7 @@ import Routes from '../../config/routes';
 
 const Permissions = require('react-native-permissions');
 import FCM from "react-native-fcm";
+import store from 'react-native-simple-store';
 
 import _ from 'lodash';
 
@@ -27,6 +28,8 @@ class Welcome extends Component {
 
   componentDidMount() {
     const { setPushToken } = this.props;
+
+    store.save('coffee', {isAwesome: true,flavor:'kevando'});
 
     this._checkPermissions();
 
@@ -107,8 +110,12 @@ class Welcome extends Component {
   render() {
     const { navigator, permissions } = this.props;
 
-    console.log(this.props)
-    // const {  pushToken } = this.state;
+    // this works
+    // store.get('coffee').then(coffee => {
+    //   flavor = 'dude'//coffee.flavor;
+    //   alert(coffee.flavor)
+    // });
+
 
 
     return (
@@ -165,6 +172,7 @@ class Welcome extends Component {
 
 
         </View>
+        
 
 
       </View>
