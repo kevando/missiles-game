@@ -41,6 +41,8 @@ export const routes = {
       getTitle() {
         return 'Welcome';
       },
+
+      showNavigationBar: false,
     };
   },
 

@@ -3,8 +3,8 @@ import ExNavigator from '@exponent/react-native-navigator';
 import Routes from '../../config/routes';
 
 const LoggedOut = () => {
-  // const route = Routes.getWelcomeRoute();
-  const route = Routes.getSignInRoute();
+  const route = Routes.getWelcomeRoute();
+  // const route = Routes.getSignInRoute();
   return (
     <ExNavigator
       initialRoute={route}

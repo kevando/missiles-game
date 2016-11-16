@@ -8,7 +8,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.background,
+    padding: 20,
   },
+  permissions: {
+    // flex: 1,
+  },
+
+
+
+
+
+
   buttons: {
     flexDirection: 'row',
   },

@@ -74,14 +74,17 @@ class Missiles extends Component {
 
 
   render() {
-    const { connected, authData, user, players, initialized } = this.props;
+    const { connected, authData, user, players, initialized, loggingIn } = this.props;
 
 
     // if (!connected || players.length <= 0 ) {
-      if (!connected ) {
-      return <Loading />;
+      if (!connected) {
+      return <Loading message="Connecting" />;
 
-    } else if (user.username) {
+    } else if (loggingIn) {
+      return <Loading message="Logging In" />;
+
+    } else if (user.uid) {
       return <LoggedIn />;
 
     } else {
@@ -100,6 +103,7 @@ function mapStateToProps(state) {
     connectedRef: state.firebase.connectedRef,
     players: state.players,
     initialized: state.app.initialized,
+    loggingIn: state.app.loggingIn,
   }
 }
 

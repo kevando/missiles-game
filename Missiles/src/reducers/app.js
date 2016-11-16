@@ -5,6 +5,8 @@ import {
   USER_LOGGED_OUT,
   USER_LOGGED_IN,
   USER_LOGGING_IN,
+  SET_TOKEN,
+  SET_PERMISSIONS,
 } from '../actions/app';
 
 import {
@@ -15,12 +17,19 @@ import {
 const initialState = {
   connectionChecked: false,
   connected: false,
+  permissions: {
+    notification: 'unknown',
+    location: 'unknown',
+    camera: 'unknown',
+    photo: 'unknown'
+  },
+  pushToken: null,
   user: {
     username: null, // app init process requires this to start out as null
     uid: null,
     pushToken: null,
     location: null,
-    notifications: false,
+
     missiles: [],
     balance: 0
   },
@@ -45,7 +54,7 @@ export default function reducer(app = initialState, action) {
       return {
         ...app,
         authData,
-        loggingIn: false,
+        // loggingIn: false,
         user: {
           ...app.user,
           uid: authData.uid
@@ -74,26 +83,36 @@ export default function reducer(app = initialState, action) {
         user: {
           ...app.user,
           ...action.player
-        }
+        },
+        loggingIn: false,
       }
-      // user: {
-      //   ...app.user,
-      //   username: action.authData.username,
-      //   uid: action.authData.uid,
-      // }
 
-  case CONNECTION_ONLINE:
-    return {
-      ...app,
-      connectionChecked: true,
-      connected: true
-    }
-  case CONNECTION_OFFLINE:
-    return {
-      ...app,
-      connectionChecked: true,
-      connected: false
-    }
+      case CONNECTION_ONLINE:
+  return {
+    ...app,
+    connectionChecked: true,
+    connected: true
+  }
+case CONNECTION_OFFLINE:
+  return {
+    ...app,
+    connectionChecked: true,
+    connected: false
+  }
+
+      case SET_TOKEN:
+        return {
+          ...app,
+          pushToken: action.token
+          }
+
+
+      case SET_PERMISSIONS:
+        return {
+          ...app,
+          permissions: action.permissions
+          }
+
 
   default:
     return app
