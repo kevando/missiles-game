@@ -23,7 +23,7 @@ export const routes = {
       getTitle() {
         return 'News';
       },
-      
+
       showNavigationBar: false,
     };
   },
@@ -125,7 +125,7 @@ export const routes = {
         return 'Missile History';
       },
 
-      showNavigationBar: true,
+      showNavigationBar: false,
     };
   },
 

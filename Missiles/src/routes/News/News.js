@@ -11,7 +11,7 @@ const News = (props) => {
   const { players } = props;
 
   var n00b = _.maxBy(players, 'createdAt');
-  var topDawg = _.maxBy(players, (p) => { return p.score.frags; });
+  var topDawg = _.maxBy(players, (p) => { return p.frags; });
 
   // alert(topDawg.username);
 

@@ -15,6 +15,7 @@ import { connect } from 'react-redux'
 
 import {
   WeaponsActions,
+  MissilesActions,
 } from './actions';
 
 import * as appActions from './actions/app'; //
@@ -60,12 +61,13 @@ class Missiles extends Component {
   }
   _initializeApp() {
 
-    const { playersActions, playersRef, weaponsActions, } = this.props;
+    const { playersActions, weaponsActions, missilesActions } = this.props;
 
     this.setState({appInitialized: true});
 
-    playersActions.listenForPlayers(playersRef);
+    playersActions.listenForPlayers();
     weaponsActions.listenForWeapons();
+    missilesActions.listenForMissiles();
 
 
   }
@@ -90,16 +92,13 @@ class Missiles extends Component {
 }
 
 
-
 function mapStateToProps(state) {
   return {
     connected: state.app.connected,
     authData: state.app.authData,
     user: state.app.user,
     connectedRef: state.firebase.connectedRef,
-    playersRef: state.firebase.playersRef,
     players: state.players,
-    missilesRef: state.firebase.dataRef.child('missiles'),
     initialized: state.app.initialized,
   }
 }
@@ -109,6 +108,7 @@ function mapDispatchToProps(dispatch) {
     appActions: bindActionCreators(appActions, dispatch),
     playersActions: bindActionCreators(playersActions, dispatch),
     weaponsActions: bindActionCreators(WeaponsActions, dispatch),
+    missilesActions: bindActionCreators(MissilesActions, dispatch),
   }
 }
 

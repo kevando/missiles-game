@@ -1,25 +1,36 @@
 import React from 'react';
-import { Text, View, Image } from 'react-native';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
-import Button from '../../components/Button';
+import { Text, View, ScrollView } from 'react-native';
 
+import Button from '../../components/Button';
+import Missile from '../../components/MissileListItem';
 import styles from './styles';
+// import Routes from '../../config/Routes'; // not yet
+
+import _ from 'lodash';
 
 const History = (props) => {
-  const { updateState, logIn, } = props;
+
+  const { missiles, navigator, uid } = props;
+
+  const myMissiles = _.filter(missiles,({sender, target}) => { return sender.uid == uid || target.uid == uid });
+
 
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1}}>
+      <ScrollView style={styles.container}>
 
-      <View style={styles.header}>
-        <Text style={styles.headerText}>NEWS</Text>
-      </View>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Your past engagement</Text>
+        </View>
 
-      <View style={styles.buttons}>
-        <Button text="Sign In as Kevin" onPress={() => logIn('kevin')} />
-      </View>
+        {
+          _.map(myMissiles,(missile,i) => {
+            return <Missile missile={missile} key={i} />
+          })
+        }
 
-      <KeyboardSpacer />
+
+      </ScrollView>
     </View>
   );
 };

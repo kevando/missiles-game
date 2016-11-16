@@ -5,6 +5,7 @@ import items from './items'
 import firebase from './firebase'
 import weapons from './weapons';
 import players from './players';
+import missiles from './missiles';
 
 export default combineReducers({
 
@@ -13,5 +14,6 @@ export default combineReducers({
   weapons,
   app,
   players,
+  missiles,
 
-})
+});

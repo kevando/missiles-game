@@ -10,7 +10,13 @@ export default StyleSheet.create({
     alignItems: 'center',
     fontSize:25,
     textAlign:'right',
-    padding:0
+    padding:0,
+    textShadowOffset: {
+      width: 2,
+      height: 2
+    },
+    textShadowRadius: 1,
+    textShadowColor: '#555',
   },
   iconSelected: {
     // tintColor: 'rgb(0, 122, 255)',
