@@ -37,7 +37,8 @@ var SettingsService = (function() {
 
 	var _settings = {
     common: [
-      {name: 'url', group: 'http', inputType: 'text', dataType: 'string', defaultValue: 'http://posttestserver.com/post.php?dir=ionic-cordova-background-geolocation'},
+      {name: 'url', group: 'http', inputType: 'select', dataType: 'string', values: ['fuckoff','https://missile-launch-bb06a.firebaseio.com/demo-app-locations.json','https://missile-launch-bb06a.firebaseio.com/demo-simulator-locations.json'], defaultValue: 'https://missile-launch-bb06a.firebaseio.com/demo-locations.json'},
+      {name: 'method', group: 'http', dataType: 'string', inputType: 'select', values: ['POST'], defaultValue: 'POST'},
       {name: 'autoSync', group: 'http', dataType: 'boolean', inputType: 'select', values: [true, false], defaultValue: true},
       {name: 'autoSyncThreshold', group: 'http', dataType: 'integer', inputType: 'select', values: [0, 5, 10, 25, 50, 100], defaultValue: 0},
       {name: 'batchSync', group: 'http', dataType: 'boolean', inputType: 'select', values: [true, false], defaultValue: false},

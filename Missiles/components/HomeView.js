@@ -11,8 +11,9 @@ import {
 
 import EventEmitter from 'EventEmitter';
 
-import Mapbox, { MapView } from 'react-native-mapbox-gl';
-Mapbox.setAccessToken('pk.eyJ1IjoiY2hyaXN0b2NyYWN5IiwiYSI6ImVmM2Y2MDA1NzIyMjg1NTdhZGFlYmZiY2QyODVjNzI2In0.htaacx3ZhE5uAWN86-YNAQ');
+import MapView, { MAP_TYPES } from 'react-native-maps';
+// import Mapbox, { MapView } from 'react-native-mapbox-gl';
+// Mapbox.setAccessToken('pk.eyJ1IjoiY2hyaXN0b2NyYWN5IiwiYSI6ImVmM2Y2MDA1NzIyMjg1NTdhZGFlYmZiY2QyODVjNzI2In0.htaacx3ZhE5uAWN86-YNAQ');
 
 import Config from './config';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -25,7 +26,7 @@ import Modal from 'react-native-modalbox';
 SettingsService.init();
 
 var HomeView = React.createClass({
-  locationIcon: require("image!green_circle"),
+  locationIcon: require('../src/images/missileIcon.png'),
   currentLocation: undefined,
   eventEmitter: new EventEmitter(),
   coordinates: [],
@@ -356,8 +357,8 @@ var HomeView = React.createClass({
             scrollEnabled={true}
             style={styles.mapBox}
             showsUserLocation={this.state.showsUserLocation}
-            styleURL={Mapbox.mapStyles.dark}
-            userTrackingMode={Mapbox.userTrackingMode.none}
+
+
             zoomEnabled={true}
             initialZoomLevel={this.state.initialZoomLevel}
             compassIsHidden={true}
