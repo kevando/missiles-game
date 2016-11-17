@@ -1,5 +1,5 @@
 
-import offline from 'react-native-simple-store'
+import store from 'react-native-simple-store'
 
 export const CONNECTION_ONLINE = 'CONNECTION_ONLINE';
 export const CONNECTION_OFFLINE = 'CONNECTION_OFFLINE';
@@ -42,6 +42,8 @@ export function listenForAuthChanges(playersRef) {
 
       if(authData) {
         dispatch({ type: USER_LOGGED_IN, authData });
+        // Save uid to disk because bg local is being a bitch in Missiles.js
+        store.save('user', { uid: authData.uid });
 
         // dispatch({ type: UPDATE_PLAYER, authData });
         // updateState({authData});

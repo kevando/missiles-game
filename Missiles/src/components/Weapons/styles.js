@@ -12,7 +12,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     borderColor: '#aaa',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    flexDirection:'row',
   },
 
 
@@ -25,6 +26,11 @@ export default StyleSheet.create({
     padding: 20,
     borderColor: '#aaa',
     borderBottomWidth: 1
+  },
+
+  image: {
+    width: window.width/4,
+    height: 70
   },
 
 });

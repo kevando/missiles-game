@@ -27,6 +27,7 @@ import LoggedIn from './layouts/LoggedIn';
 import Loading from './components/Loading';
 
 import BackgroundGeolocation from 'react-native-background-geolocation';
+import store from 'react-native-simple-store';
 
 
 class Missiles extends Component {
@@ -37,6 +38,9 @@ class Missiles extends Component {
     const { appActions, connectedRef } = this.props;
     // Dispatch a Firebase action to set the connection status
     appActions.checkConnection(connectedRef);
+
+    // This listener determines whether user is logged in or not
+    appActions.listenForAuthChanges();
 
 
     // This handler fires whenever bgGeo receives a location update.
@@ -88,15 +92,30 @@ class Missiles extends Component {
     BackgroundGeolocation.un('motionchange', this.onMotionChange);
   }
   onLocation(location) {
+    // no fucking data is saved here, so i gotta pull it i guess
+    const { dataRef } = this.props;
+    store.get('user')
+      .then(user => {
+        alert('location changed'+user.uid);
+
+        dataRef
+          .child('players')
+          .child(user.uid)
+          .update({location});
+
+      })
+
     console.log('- [js]location: ', JSON.stringify(location));
-    const { dataRef, uid } = this.props;
-    // alert('location changed');
-    if(uid){
-      dataRef
-        .child('players')
-        .child(uid)
-        .update({location});
-    }
+
+    // console.log(this.props)
+    // alert('location changed'+user.uid);
+    // if(authData.uid){
+    //   dataRef
+    //     .child('players')
+    //     .child(uid)
+    //     .update({location});
+    // }
+
 
   }
   onMotionChange(location) {
@@ -111,9 +130,7 @@ class Missiles extends Component {
 
 
   componentDidMount () {
-    const { appActions} = this.props;
-    // This listener determines whether user is logged in or not
-    appActions.listenForAuthChanges();
+
 
 
   }
@@ -155,6 +172,7 @@ class Missiles extends Component {
       return <Loading message="Logging In" />;
 
     } else if (user.uid) {
+      // alert(user.uid)
       return <LoggedIn />;
 
     } else {
@@ -175,7 +193,7 @@ function mapStateToProps(state) {
     initialized: state.app.initialized,
     loggingIn: state.app.loggingIn,
     dataRef: state.firebase.dataRef,
-    uid: state.app.user.uid
+    uid: state.app.authData.uid
   }
 }
 
