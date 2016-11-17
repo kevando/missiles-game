@@ -17,6 +17,7 @@ export function listenForPlayers() {
     const { authData } = getState().app;
 
     dataRef.child('players').on('child_changed', (snapshot) => {
+      
 
       dispatch({ type: UPDATE_PLAYER, player: snapshot.val() });
 

@@ -253,7 +253,8 @@ class Launch extends React.Component {
     // console.log(this.state);
 
     // no fucking clue why map wont work in the Callout
-    const availableWeapons = _.map(this.props.availableWeapons,(weapon,i) => {return (<Text key={i} onPress={(weapon) => this.onWeaponSelect}>{weapon.name}</Text>) })
+    // const availableWeapons = _.map(this.props.availableWeapons,(weapon,i) => {return (<Text key={i} onPress={(weapon) => this.onWeaponSelect}>{weapon.name}</Text>) })
+    const weapon = this.props.weapon;
 
     return (
       <View style={styles.container}>
@@ -329,17 +330,14 @@ class Launch extends React.Component {
           }
 
           {this.state.targetMarker && !this.state.launched && !this.state.weapon && this.state.destination &&
-            
-            _.map(this.props.availableWeapons,(weapon,i) => {
-              return(
-                <TouchableOpacity key={i}
-                  onPress={() => this.setState({weapon: weapon})}
-                  style={[styles.bubble, styles.button]}
-                >
-                  <Text>{weapon.name}</Text>
-                </TouchableOpacity>
-              )
-            })
+            <TouchableOpacity
+              onPress={() => this.setState({weapon: weapon})}
+              style={[styles.bubble, styles.button]}
+            >
+              <Text>Choose {weapon.name}</Text>
+            </TouchableOpacity>
+
+
 
             }
 

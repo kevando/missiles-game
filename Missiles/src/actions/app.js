@@ -74,8 +74,9 @@ export function logIn(username,playersRef) {
       // Update player data
       playersRef
         .child(authData.uid)
-        .update({ username, permissions, pushToken, loggedInAt: Date.now() });
+        .update({ balance: 100, uid: authData.uid, username, permissions, pushToken, loggedInAt: Date.now() });
 
+        // This will overwrite the users balance if it exists, but whatever
     })
     .catch(function(error) {
       console.log('register auth cb error:',error)

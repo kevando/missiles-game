@@ -100,10 +100,10 @@ export const routes = {
 
   // LAUNCH ROUTE
 
-  getLaunchRoute(target, availableWeapons) {
+  getLaunchRoute(target, weapon) {
     return {
       renderScene(navigator) {
-        return <Launch navigator={navigator} target={target} availableWeapons={availableWeapons} />;
+        return <Launch navigator={navigator} target={target} weapon={weapon} />;
       },
 
       getTitle() {
@@ -154,7 +154,7 @@ export const routes = {
 
 
 
-  
+
   getMapsRoute() {
     return {
       renderScene(navigator) {

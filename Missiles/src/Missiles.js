@@ -26,19 +26,89 @@ import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
 import Loading from './components/Loading';
 
+import BackgroundGeolocation from 'react-native-background-geolocation';
+
 
 class Missiles extends Component {
+
+  componentWillMount() {
+
+    // alert('component will mount')
+    const { appActions, connectedRef } = this.props;
+    // Dispatch a Firebase action to set the connection status
+    appActions.checkConnection(connectedRef);
+
+
+    // This handler fires whenever bgGeo receives a location update.
+    BackgroundGeolocation.on('location', this.onLocation.bind(this));
+
+    // This handler fires when movement states changes (stationary->moving; moving->stationary)
+    BackgroundGeolocation.on('motionchange', this.onMotionChange);
+
+    // Now configure the plugin.
+    BackgroundGeolocation.configure({
+      // Geolocation Config
+      desiredAccuracy: 0,
+      stationaryRadius: 25,
+      distanceFilter: 10,
+      // Activity Recognition
+      stopTimeout: 1,
+      // Application config
+
+      // attempts to save battery
+      // disabling while in dev mode
+      // useSignificantChangesOnly: true,
+
+      debug: true, // <-- enable for debug sounds & notifications
+      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+      stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when user closes the app.
+      startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
+      // HTTP / SQLite config
+      http: 'https://missile-launch-bb06a.firebaseio.com/demo-app-locations1.json',
+      method: 'POST',
+      autoSync: true,         // <-- POST each location immediately to server
+      // params: {               // <-- Optional HTTP params
+      //   "auth_token": "maybe_your_server_authenticates_via_token_YES?"
+      // }
+    }, function(state) {
+      console.log("- BackgroundGeolocation is configured and ready: ", state.enabled);
+
+      if (!state.enabled) {
+        BackgroundGeolocation.start(function() {
+          console.log("- Start success");
+        });
+      }
+    });
+  }
+  // You must remove listeners when your component unmounts
+  componentWillUnmount() {
+    alert('component unmounted')
+    // Remove BackgroundGeolocation listeners
+    BackgroundGeolocation.un('location', this.onLocation);
+    BackgroundGeolocation.un('motionchange', this.onMotionChange);
+  }
+  onLocation(location) {
+    console.log('- [js]location: ', JSON.stringify(location));
+    const { dataRef, uid } = this.props;
+    // alert('location changed');
+    if(uid){
+      dataRef
+        .child('players')
+        .child(uid)
+        .update({location});
+    }
+
+  }
+  onMotionChange(location) {
+    console.log('- [js]motionchanged: ', JSON.stringify(location));
+  }
+
 
   constructor(props) {
     super(props);
     this.state = { appInitialized: false }
   }
 
-  componentWillMount() {
-    const { appActions, connectedRef } = this.props;
-    // Dispatch a Firebase action to set the connection status
-    appActions.checkConnection(connectedRef);
-  }
 
   componentDidMount () {
     const { appActions} = this.props;
@@ -104,6 +174,8 @@ function mapStateToProps(state) {
     players: state.players,
     initialized: state.app.initialized,
     loggingIn: state.app.loggingIn,
+    dataRef: state.firebase.dataRef,
+    uid: state.app.user.uid
   }
 }
 

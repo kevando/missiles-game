@@ -39,7 +39,7 @@ class Welcome extends Component {
     FCM.getFCMToken().then(token => {
       console.log("TOKEN (getFCMToken)", token);
 
-      this.setState({pushToken: token});
+      // this.setState({pushToken: token});
       setPushToken(token);
 
     });
@@ -134,30 +134,6 @@ class Welcome extends Component {
 
             <View style={styles.permissions}>
 
-            {
-              _.map(permissions,(permission,p) => {
-                return (<Text key={p}>{p} permission status: {permission}</Text>)
-              })
-            }
-
-              <View style={styles.buttons} >
-              {
-                (permissions.location != 'authorized') &&
-                  <Button text="Enable Location permissions" onPress={()=>this._alertForPermission('location')} />
-              }
-              </View>
-
-              <View style={styles.buttons} >
-              {
-                (permissions.notification != 'authorized') &&
-                  <Button text="Enable Notifications permissions" onPress={()=>this._alertForPermission('notification')} />
-              }
-              </View>
-
-
-
-
-
             <View style={styles.buttons} >
             {
               true &&
@@ -172,7 +148,7 @@ class Welcome extends Component {
 
 
         </View>
-        
+
 
 
       </View>
