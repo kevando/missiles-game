@@ -9,6 +9,7 @@ import Friends from '../routes/Friends';
 import Maps from '../routes/Maps';
 import Launch from '../routes/Launch';
 import History from '../routes/History';
+import Location from '../routes/Location';
 
 export const routes = {
 
@@ -131,6 +132,29 @@ export const routes = {
     };
   },
 
+  // --------------------------------------------------------------------
+
+  // LOCATION ROUTE (For Testing)
+
+  getLocationRoute() {
+    return {
+      renderScene(navigator) {
+        return <Location navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Location Testing';
+      },
+
+      showNavigationBar: true,
+    };
+  },
+
+
+
+
+
+  
   getMapsRoute() {
     return {
       renderScene(navigator) {
