@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import History from './History';
 
-
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as appActions from '../../actions/app'
-
 function mapStateToProps(state) {
   return {
-    // probly some loggingIn state info
-    // connectionChecked: state.items.connectionChecked,
-    // connected: state.items.connected
+    missiles: state.missiles,
+    uid: state.app.authData.uid
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(appActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(History)
+export default connect(mapStateToProps)(History)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Welcome from './Welcome';
+import Location from './Location';
 
 
 import { bindActionCreators } from 'redux'
@@ -9,7 +9,7 @@ import {AppActions} from '../../actions';
 
 function mapStateToProps(state) {
   return {
-    permissions: state.app.permissions,
+    dataRef: state.firebase.dataRef,
     // probly some loggingIn state info
     // connectionChecked: state.items.connectionChecked,
     // connected: state.items.connected
@@ -20,4 +20,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(AppActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Welcome)
+export default connect(mapStateToProps, mapDispatchToProps)(Location)

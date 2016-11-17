@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Text } from 'react-native';
 import styles from './styles';
 
 const Loading = (props) => {
@@ -10,6 +10,7 @@ const Loading = (props) => {
         size={props.size}
         {...props}
       />
+      <Text>{props.message}</Text>
     </View>
   );
 };

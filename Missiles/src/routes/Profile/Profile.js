@@ -19,6 +19,7 @@ const Profile = (props) => {
 
         <Text>{capitalize(user.username)}</Text>
         <Button text="Sign Out" onPress={logOut} />
+        <Text>If the app is not working very well, check settings and make sure permissions are enabled</Text>
       </View>
     </View>
   );

@@ -5,6 +5,7 @@ import { MyWeapon } from '../../components/Weapons';
 import Button from '../../components/Button';
 import styles from './styles';
 import Routes from '../../config/routes'; // put this in redux?
+import { H2 } from '../../components/Text';
 
 import _ from 'lodash';
 
@@ -17,6 +18,8 @@ class Stockpile extends Component {
 
     return (
       <View style={styles.container}>
+      <H2>You have {user.balance} coins</H2>
+      {!user.weapons && <H2>Your stockpile is empty</H2>}
 
       {
         _.map(user.weapons,(weapon,i) => {

@@ -9,6 +9,7 @@ import Friends from '../routes/Friends';
 import Maps from '../routes/Maps';
 import Launch from '../routes/Launch';
 import History from '../routes/History';
+import Location from '../routes/Location';
 
 export const routes = {
 
@@ -23,6 +24,8 @@ export const routes = {
       getTitle() {
         return 'News';
       },
+
+      showNavigationBar: false,
     };
   },
 
@@ -39,6 +42,8 @@ export const routes = {
       getTitle() {
         return 'Welcome';
       },
+
+      showNavigationBar: false,
     };
   },
 
@@ -95,10 +100,10 @@ export const routes = {
 
   // LAUNCH ROUTE
 
-  getLaunchRoute(target, availableWeapons) {
+  getLaunchRoute(target, weapon) {
     return {
       renderScene(navigator) {
-        return <Launch navigator={navigator} target={target} availableWeapons={availableWeapons} />;
+        return <Launch navigator={navigator} target={target} weapon={weapon} />;
       },
 
       getTitle() {
@@ -123,9 +128,32 @@ export const routes = {
         return 'Missile History';
       },
 
+      showNavigationBar: false,
+    };
+  },
+
+  // --------------------------------------------------------------------
+
+  // LOCATION ROUTE (For Testing)
+
+  getLocationRoute() {
+    return {
+      renderScene(navigator) {
+        return <Location navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Location Testing';
+      },
+
       showNavigationBar: true,
     };
   },
+
+
+
+
+
 
   getMapsRoute() {
     return {

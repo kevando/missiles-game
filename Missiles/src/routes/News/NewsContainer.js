@@ -1,22 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 
 import News from './News';
 
-
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as appActions from '../../actions/app'
-
 function mapStateToProps(state) {
   return {
-    // probly some loggingIn state info
-    // connectionChecked: state.items.connectionChecked,
-    // connected: state.items.connected
+    players: state.players
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(appActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(News)
+export default connect(mapStateToProps)(News)

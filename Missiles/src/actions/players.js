@@ -10,12 +10,14 @@ export const APP_INITIALIZED = 'APP_INITIALIZED';
 // -------------------------------------------------------------------------
 
 
-export function listenForPlayers(playersRef) {
+export function listenForPlayers() {
   return (dispatch, getState) => {
 
-    const {authData} = getState().app;
+    const { dataRef } = getState().firebase;
+    const { authData } = getState().app;
 
-    playersRef.on('child_changed', (snapshot) => {
+    dataRef.child('players').on('child_changed', (snapshot) => {
+      
 
       dispatch({ type: UPDATE_PLAYER, player: snapshot.val() });
 
@@ -26,7 +28,7 @@ export function listenForPlayers(playersRef) {
 
     });
 
-    playersRef.on('child_added', (snapshot) => {
+    dataRef.child('players').on('child_added', (snapshot) => {
 
       dispatch({ type: ADD_PLAYER, player: snapshot.val() });
 
