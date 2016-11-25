@@ -96,7 +96,6 @@ class Missiles extends Component {
     const { dataRef } = this.props;
     store.get('user')
       .then(user => {
-        alert('location changed'+user.uid);
 
         dataRef
           .child('players')

@@ -10,7 +10,7 @@ import _ from 'lodash';
 const News = (props) => {
   const { players } = props;
 
-  var n00b = _.maxBy(players, 'loggedIn');
+  var n00b = _.maxBy(players, 'loggedInAt');
   var topDawg = _.maxBy(players, (p) => { return p.frags; });
 
   // alert(topDawg.username);
