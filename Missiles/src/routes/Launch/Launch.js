@@ -121,6 +121,8 @@ class Launch extends React.Component {
     //
     // })
 
+    const { target } = this.props;
+    console.log(target)
 
     this.setState({
       senderMarker: {
@@ -131,10 +133,16 @@ class Launch extends React.Component {
           // key: id++,
           color: 'blue',
         },
-      // someMarker: {
-      //   coordinate: this.state.someCoordinate,
-      //   color: 'purple'
-      // },
+
+      // Debug. Set Target marker
+      targetMarker: {
+          coordinate: {
+            latitude: target.location.coords.latitude,
+            longitude: target.location.coords.longitude,
+          },
+          color: 'green',
+        },
+
       missileMarker: {
         coordinate: this.state.missileCoordinate,
 
@@ -181,14 +189,23 @@ class Launch extends React.Component {
     }
   }
 
+  setImpact(missile) {
+
+    const { setImpact, weapon } = this.props;
+    // Redux
+    alert(missile.name)
+    setImpact(missile);
+
+
+    this.setFlightPath();
+
+
+
+  }
+
+
   setFlightPath() {
     const { polylines, editing, senderMarker, targetMarker } = this.state;
-
-    // this.state.someMarker.coordinate.timing({
-    //   latitude: this.state.targetMarker.coordinate.latitude,
-    //   longitude: this.state.targetMarker.coordinate.longitude,
-    //   duration: 5000
-    // }).start();
 
     //
     this.setState({
@@ -203,22 +220,36 @@ class Launch extends React.Component {
 
 
   fireMissile() {
-    // this.map.animateToRegion(this.homeRegion(),5000); // lags
 
+    const { fireMissile, weapon, target, user } = this.props;
+
+
+
+    var missile = _.cloneDeep(weapon);
+
+    missile.sender = user;
+    missile.target = target;
+    missile.status = 'airborn';
+    missile.firedAt = Date.now();
+    missile.destination = {latitude: this.state.targetMarker.coordinate.latitude, longitude: this.state.targetMarker.coordinate.longitude}
+
+    // Redux (bad name)
+    fireMissile(missile);
+    // Where does notification happen?
+
+
+
+    // Animation
     this.fitMarkers();
 
     this.setState({launched: true, zoomEnabled: false, scrollEnabled: false});
-
-
-    // return;
-
 
     this.state.missileMarker.coordinate.timing({
       latitude: this.state.targetMarker.coordinate.latitude,
       longitude: this.state.targetMarker.coordinate.longitude,
       duration: 5000,
       delay: 3000
-    }).start(this.setFlightPath.bind(this));
+    }).start(this.setImpact.bind(this,missile));
 
     this.state.missileMarker.coordinate.addListener((coordinate) => this.setState({distance: getDistance(coordinate)}));
 
@@ -306,6 +337,13 @@ class Launch extends React.Component {
           />
         }
 
+        {this.state.targetMarker &&
+          <MapView.Marker
+            coordinate={this.state.targetMarker.coordinate}
+            pinColor={this.state.targetMarker.color}
+          />
+        }
+
           {this.state.flightPath &&
             <MapView.Polyline
               key="flightPathPolyline"
@@ -331,24 +369,16 @@ class Launch extends React.Component {
 
           {this.state.targetMarker && !this.state.launched && !this.state.weapon && this.state.destination &&
             <TouchableOpacity
-              onPress={() => this.setState({weapon: weapon})}
-              style={[styles.bubble, styles.button]}
-            >
-              <Text>Choose {weapon.name}</Text>
-            </TouchableOpacity>
-
-
-
-            }
-
-          {this.state.targetMarker && !this.state.launched && this.state.weapon && this.state.destination &&
-            <TouchableOpacity
               onPress={this.fireMissile.bind(this)}
               style={[styles.bubble, styles.button]}
             >
-              <Text>Fire</Text>
+              <Text>FIRE</Text>
             </TouchableOpacity>
+
+
+
             }
+
 
         </View>
         <View style={styles.navContainer}>

@@ -77,7 +77,7 @@ class Friends extends Component {
             {
               _.map(user.weapons,(weapon,i) => {
                 return (
-                  <TouchableOpacity key={i} onPress={(target) => navigator.push(Routes.getLaunchRoute(target,weapon)) } >
+                  <TouchableOpacity key={i} onPress={() => navigator.push(Routes.getLaunchRoute(target,weapon)) } >
                     <MyWeapon weapon={weapon}  />
                   </TouchableOpacity>
                 )

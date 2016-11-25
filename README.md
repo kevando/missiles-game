@@ -2,13 +2,17 @@
 React Native &amp; Appengine 
 
 
-## Development - version 3
+## Development - version 2
 
-### Tasks
+### Todo
  - Fire missiles with impact in redux, impact*rand
+ - add timeago debug
+ - 'incoming' missile screen
  - Notifications, is fcm working?
  - coin server (celery python plugin)
- - 'incoming' missile screen
+ - Clean up some design of other pages, launch, missile images
+ - Basic history page, use face emoji to, show hits, misses
+ - Leaderboard on 2nd news page, add more people to news cover
 
 
 
@@ -23,4 +27,4 @@ React Native &amp; Appengine
 
 ## Release History
 
-### Version 2 (release nov1)
+### Version 1 (release nov1)

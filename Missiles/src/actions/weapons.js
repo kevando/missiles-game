@@ -41,11 +41,19 @@ export function buyWeapon(weapon,coins) {
       alert('Cant buy weapon! This error should never occure in the action');
 
     // Add weapon to user object
+    var weaponKey = dataRef
+      .child('players')
+      .child(uid)
+      .child('weapons')
+      .push(weapon).key;
+
+    // Bad redundent code, but whatever
     dataRef
       .child('players')
       .child(uid)
       .child('weapons')
-      .push(weapon);
+      .child(weaponKey)
+      .update({weapon_key: weaponKey});
 
     // Update users balance
     dataRef
