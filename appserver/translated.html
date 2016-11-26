@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block form %}
+  <form method="post" id="translate">
+	<fieldset>
+      <input placeholder="{{ placeholder }}" name="phrase" class='phrase'>
+      <button class="chew-btn chew-btn-active" type="submit" onclick="analytics.track('Click Translate button', {category: 'Main Page',label: 'nth page'});"></button>
+    </fieldset>
+  </form>
+
+<script>
+// Validate
+$('#translate').submit(function() {
+  if($('.phrase').val() == ''){
+	$('.phrase').addClass('invalid-input')
+    return false;
+  }
+});
+
+</script>
+{% endblock %}
+
+
+{% block translate %}
+ <p><strong>Wookie Translation:</strong> {{ translation }} </p>
+{% endblock %}
+
+
+
+{% block share %}
+<div id='fb-root'></div>
+  <script src='http://connect.facebook.net/en_US/all.js'></script>
+  <script> 
+    FB.init({appId: "45549182362", status: true, cookie: true});
+
+    function postToFeed() {
+      // calling the API ...
+      var obj = {
+        method: 'feed',
+        redirect_uri: 'http://www.wookietranslator.com',
+        link: 'http://www.wookietranslator.com/uughghhhgh/{{ translationId }}',
+        name: 'Wookie Translator',
+        caption: 'Chewy Translations',
+  		picture: 'http://wookietranslator.com/img/fb-icon75-75.png',
+        description: 'uuughh hnnnhrrhhh awwgggghhh wrrhwrwwhw!'
+      };
+
+      function callback(response) {
+        document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+//		alert('kev');
+      }
+
+      FB.ui(obj, callback);
+    }
+
+	function SelectAll(id){
+	    document.getElementById(id).focus();
+	    document.getElementById(id).select();
+	}
+
+  
+  </script>
+
+<p>
+	<span class='share-text'>Share <b><i>this</i></b> translation on </span> 
+	<a href="#" class='fb-button' onclick="analytics.track('Share', {category: 'Translated Page',label: 'Facebook'}); postToFeed(); return false;">
+		Facebook 
+	</a>or 
+	<a class="tw-button twitter popup" onClick="analytics.track('Share', {category: 'Translated Page',label: 'Twitter'});" href="http://twitter.com/share?url=http://www.wookietranslator.com/uughghhhgh/{{ translationId }}" target="_blank" rel="nofollow">
+		Twitter
+	</a>
+</p>
+
+<script type="text/javascript">
+ $('.popup').click(function(event) {
+    var width  = 575,
+        height = 400,
+        left   = ($(window).width()  - width)  / 2,
+        top    = ($(window).height() - height) / 2,
+        url    = this.href,
+        opts   = 'status=1' +
+                 ',width='  + width  +
+                 ',height=' + height +
+                 ',top='    + top    +
+                 ',left='   + left;
+
+    window.open(url, 'twitte', opts);
+
+    return false;
+  });</script>
+
+
+
+{% endblock %}
+
+
+
+

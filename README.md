@@ -1,6 +1,25 @@
-# missiles-game
+# Missiles
 React Native &amp; Appengine 
 
-### What is in this repo?
-I will try to include any instructions on how to set this up yourself, so open an issue if you have any questions about how this all works. I built the app in react native and it uses a python push notification server that runs on Google's Appengine. 
 
+## Development - version 2
+
+### Todo
+ - 'incoming' missile screen + notifications
+ - coin server (celery python plugin)
+ - create better structure for appengine code, versioning
+
+
+
+### Release Notes
+ - BG tracking cares about battery
+ - Missile News
+ - Added redux
+ - Added Austen missile designs
+
+
+
+
+## Release History
+
+### Version 1 (release nov1)

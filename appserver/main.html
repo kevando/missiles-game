@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block form %}
+  <form method="post" id="translate">
+    <fieldset>
+	  <input placeholder="{{ placeholder }}" name="phrase" class='phrase'>
+      <button class="chew-btn" type="submit" onclick="analytics.track('Click Translate button', {category: 'Main Page',label: 'Root page'});"></button>
+    </fieldset>
+  </form>
+
+<script>
+// Validate
+$('#translate').submit(function() {
+  if($('.phrase').val() == ''){
+	$('.phrase').addClass('invalid-input')
+    return false;
+  }
+});
+
+</script>
+{% endblock %}
+
+
+
+

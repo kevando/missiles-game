@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Current Players</h2>
+<table border=1>
+  <tr>
+    <th>Username</th>
+    <th>Frags</th>
+    <th>Deaths</th>
+    <th>Next Missile</th>
+    <th>New Missile</th>
+  </tr>
+
+{% for user in users %}
+<tr>
+
+  <td>{{ user.username }}</td>
+  <td>{{ user.frags }}</td>
+  <td>{{ user.deaths }}</td>
+  <td>In {{ user.untilNextMissile }} minutes</td>
+
+  <td>
+
+    <form action="/notify" method="POST">
+      <input type="hidden" name="token" value="{{ user.pushToken }}" />
+      <button type="submit">Notify User</button>
+    </form>
+  </td>
+
+
+</tr>
+{% endfor %}
+</table>
+
+
+<h2>Current Missiles</h2>
+<table border=1>
+  <tr>
+    <th>Sender</th>
+    <th>Status</th>
+    <th>Target</th>
+
+  </tr>
+
+{% for missile in missiles %}
+<tr>
+
+  <td>{{ missile.sender.username }}</td>
+  <td>{{ missile.status }}</td>
+  <td>{{ missile.target.username }}</td>
+
+</tr>
+{% endfor %}
+</table>
+
+
+
+
+
+
+
+{% endblock %}
