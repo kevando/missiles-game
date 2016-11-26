@@ -7,7 +7,7 @@ const images = {
     profile: require('../images/user-icon.png'),
   },
   profileHeader: require('../images/header-image.png'),
-  avatarPlaceholder: require('../images/avatar-placeholder.png'),
+  flag: require('../images/usa-flag.png'),
   weapons: {
     missile01: require('../images/missile01.png'),
     missile02: require('../images/missile02.png'),

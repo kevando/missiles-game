@@ -1,0 +1,45 @@
+class Missiles(webapp2.RequestHandler):
+    def get(self):
+
+
+
+        snapshot = firebase.get('/v1/users', None)
+
+
+        for uid in snapshot:
+            user = snapshot[uid]
+            logging.info(user['username'])
+
+
+            if 'nextMissile' in user.keys():
+                logging.info('Next missile exists!')
+                # Now check if this date is beyond now
+                nextMissile = user['nextMissile']
+                now = time.time()
+                logging.info(nextMissile)
+                logging.info(now)
+                if now > nextMissile:
+                    logging.info('User should get a new missile!')
+                    giveMissile(user)
+                else:
+                    logging.info('User is not ready for a new missile yet')
+
+            else:
+                logging.info('No next missile!')
+                # So lets go ahead and give this user a missile
+                # And in doing so, set the nextMissile value
+
+
+
+
+        templateValues = {'placeholder':'Enter Human Language'}
+        path = os.path.join(os.path.dirname(__file__), 'main.html')
+        self.response.out.write(template.render(path, templateValues))
+
+    def post(self,urlKey):
+        userInput = self.request.get('phrase')
+        newUrlKey = translateToWookie(userInput,self.request.remote_addr)
+        translation = Translation.get_by_id(newUrlKey)
+        templateValues = {'placeholder':translation.english,'translation':translation.wookie,'translationId':translation.key().id(), 'key':config.getKey(), 'BASE_URL':config.getRootURL()}
+        path = os.path.join(os.path.dirname(__file__), 'translated.html')
+        self.response.out.write(template.render(path, templateValues))

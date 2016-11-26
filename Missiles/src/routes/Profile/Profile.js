@@ -1,9 +1,8 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 import Button from '../../components/Button';
-// import Avatar from '../../components/Avatar';
 import images from '../../config/images';
-import { capitalize } from '../../lib/string';
+
 import styles from './styles';
 
 const Profile = (props) => {
@@ -14,10 +13,10 @@ const Profile = (props) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.header} source={images.profileHeader} />
+      <Image style={styles.header} source={images.flag} />
       <View style={styles.body}>
 
-        <Text>{capitalize(user.username)}</Text>
+        <Text style={{fontSize:40,paddingVertical:10,paddingHorizontal:20}}>{user.username}</Text>
         <Button text="Sign Out" onPress={logOut} />
         <Text>If the app is not working very well, check settings and make sure permissions are enabled</Text>
       </View>

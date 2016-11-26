@@ -10,6 +10,7 @@ import { MyWeapon } from '../../components/Weapons';
 
 import _ from 'lodash';
 import moment from 'moment';
+import Emoji from 'react-native-emoji';
 
 class Friends extends Component {
 
@@ -22,8 +23,11 @@ class Friends extends Component {
 
 
   onTargetPress(target) {
-    // alert(target.username)
-    this.setState({target});
+    const { user } = this.props;
+    if(target.location && target.uid != user.uid)
+      this.setState({target});
+    else
+      alert('This target is not available for some reason')
   }
 
   getStyle(target) {
@@ -40,24 +44,21 @@ class Friends extends Component {
 
     const { missile, target } = this.state;
 
-    // var availableWeapons = [user.weapons[0]];
-    // availableWeapons.push(user.weapons[0]);// HARDCODING CAUSE IM DUMB
-    // alert(user.weapons[0])
-    // console.log(user.weapons)
-
-
 
     return (
       <View style={styles.container}>
-      <H2>Available Targets</H2>
+
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Available Targets</Text>
+        </View>
 
       {
         _.map(players,(target,i) => {
           return (
             <TouchableOpacity  onPress={this.onTargetPress.bind(this,target) }  key={i} >
             <View style={[styles.listItem,this.getStyle(target)]}>
-              <H2>{`Fire at ${target.username}`}</H2>
-              {target.location &&
+              <H2><Emoji name="smiley" />{`Fire at ${target.username}`}</H2>
+              {target.location && user.username == 'kevin' &&
                 <Text>{`Last heard from ${moment(target.location.timestamp).fromNow()}`}</Text>
               }
 
@@ -69,15 +70,17 @@ class Friends extends Component {
 
       {target &&
         <View style={styles.weapons}>
-        <H2>Available Weapons</H2>
+
 
         {user.weapons ?
           <View>
-            <Text>Select a Weapon</Text>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Select a Missile to fire</Text>
+          </View>
             {
               _.map(user.weapons,(weapon,i) => {
                 return (
-                  <TouchableOpacity key={i} onPress={(target) => navigator.push(Routes.getLaunchRoute(target,weapon)) } >
+                  <TouchableOpacity key={i} onPress={() => navigator.push(Routes.getLaunchRoute(target,weapon)) } >
                     <MyWeapon weapon={weapon}  />
                   </TouchableOpacity>
                 )

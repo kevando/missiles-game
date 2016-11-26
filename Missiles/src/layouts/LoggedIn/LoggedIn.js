@@ -11,7 +11,7 @@ class LoggedIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'Stockpile',
+      selectedTab: 'Launch',
     };
   }
 
@@ -26,6 +26,7 @@ class LoggedIn extends React.Component {
       <TabNavigator.Item
         selected={selectedTab === title}
         title={title}
+        
         renderIcon={() => <Text style={styles.icon}><Emoji name={Icon} /></Text>}
         renderSelectedIcon={() => (
           <Text style={[styles.icon, styles.iconSelected]}>

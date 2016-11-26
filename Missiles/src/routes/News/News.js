@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 
+import Routes from '../../config/routes';
 import Button from '../../components/Button';
 import styles from './styles';
 
@@ -8,12 +9,12 @@ import Emoji from 'react-native-emoji';
 import _ from 'lodash';
 
 const News = (props) => {
-  const { players } = props;
+  const { players, navigator } = props;
 
   var n00b = _.maxBy(players, 'loggedInAt');
   var topDawg = _.maxBy(players, (p) => { return p.frags; });
 
-  // alert(topDawg.username);
+  if(!topDawg) return <View /> // should be loading but whatever
 
   return (
     <View style={styles.container}>
@@ -31,7 +32,7 @@ const News = (props) => {
 
 
         <View style={styles.content}>
-          <Text style={styles.contentTitle}>CAN ANYONE STOP {topDawg.username.toUpperCase()}?? {"\n"}<Emoji name="fire" /><Emoji name="fire" /><Emoji name="fire" /></Text>
+          <Text onPress={() => navigator.push(Routes.getLeaderboardRoute())} style={styles.contentTitle}>CAN ANYONE STOP {topDawg.username.toUpperCase()}?? {"\n"}<Emoji name="fire" /><Emoji name="fire" /><Emoji name="fire" /></Text>
           <Text style={styles.faceEmoji}><Emoji name="scream_cat" /></Text>
         </View>
 
