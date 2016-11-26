@@ -63,7 +63,7 @@ class Missiles extends Component {
       // disabling while in dev mode
       // useSignificantChangesOnly: true,
 
-      debug: true, // <-- enable for debug sounds & notifications
+      debug: false, // <-- enable for debug sounds & notifications
       logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
       stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when user closes the app.
       startOnBoot: true,        // <-- Auto start tracking when device is powered-up.

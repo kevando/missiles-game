@@ -2,6 +2,7 @@ import offline from 'react-native-simple-store';
 import _ from 'lodash';
 
 import { getImpactDistance } from '../lib/maps';
+import FirebaseClient from '../FirebaseClient';
 
 export const ADD_MISSILE = 'ADD_MISSILE';
 
@@ -50,6 +51,8 @@ export function fireMissile(missile) {
       .child('missiles')
       .child(missile.weapon_key)
       .update(missile);
+
+    FirebaseClient.notifyTargetLaunched(missile);
   }
 }
 
@@ -74,8 +77,11 @@ export function setImpact(weapon) {
 
     if(missile.frag){
       alert('YOUR MISSILE HIT THEM!');
+      FirebaseClient.notifyTargetImpact(missile);
+
     } else {
       alert('YOUR MISSILE MISSED THEM!');
+      FirebaseClient.notifyTargetImpact(missile);
     }
 
     const { dataRef } = getState().firebase;

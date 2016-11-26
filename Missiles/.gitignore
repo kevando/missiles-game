@@ -56,3 +56,4 @@ data
 
 # Firebase config
 src/config/firebase.js
+src/config/Constants.js
