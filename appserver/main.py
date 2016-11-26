@@ -42,7 +42,7 @@ DSN = 'https://missile-launch-bb06a.firebaseio.com/'
 
 firebase = FirebaseApplication(DSN, None)
 
-appVersion = 'v1'
+appVersion = 'v2'
 
 
 # ---------------------------------------------------------------------
@@ -93,6 +93,22 @@ class Cron(webapp2.RequestHandler):
         # Check for any Airborn missiles.
         checkForImpact(self)
 
+
+# ---------------------------------------------------------------------
+
+# Cron Handler that runs every 5 minutes (currently testing)
+
+class CoinsGenerator(webapp2.RequestHandler):
+
+    def get(self):
+
+        # Give all players 5 coins (via cron every 5 minutes)
+        disperseCoins(5)
+
+        self.response.write('Coins added')
+
+
+
 # ---------------------------------------------------------------------
 # ---------------------------------------------------------------------
 # ---------------------------------------------------------------------
@@ -102,6 +118,7 @@ class Cron(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([('/missiles', Missiles),
                               ('/notify',Notify),
                               ('/cron',Cron),
+                              ('/coins',CoinsGenerator),
                               ('/', MainPage),],
                               debug=False)
 
@@ -109,7 +126,44 @@ app = webapp2.WSGIApplication([('/missiles', Missiles),
 # ---------------------------------------------------------------------
 # ---------------------------------------------------------------------
 
+def disperseCoins(coins):
+    logging.info('DISPARSE COINS')
+    for user in getUsers():
+        logging.info('GIVE THISSSS USER COINS')
+        giveUserCoins(user,coins)
+
+# ---------------------------------------------------------------------
+# Set Impact & notify the 2 players of the outcome
+
+def giveUserCoins(user,coins):
+
+    logging.info('GIVE USER COINS')
+    logging.info(user)
+    logging.info(user['uid'])
+
+    newBalance = user['balance'] + coins
+    firebase.patch(('/%s/players/%s' % (appVersion,user['uid'])), {'balance': newBalance})
+
+
+    # Now update the players with what happened
+    if newBalance == 100:
+
+        data = {
+    	   'to': user['pushToken'],
+           "notification":{
+            "title": "Coins!!",
+            "body": "You just hit 100 coins!",
+            "sound": "default",
+            },
+            "priority": 10
+        }
+        notifyUser(data)
+
+
+# ---------------------------------------------------------------------
+
 # Check and see if any user should get a new missile
+
 
 def checkForNewMissiles(self):
 
@@ -259,7 +313,7 @@ def getMissiles():
 # Function to grab all Users from firebase & append time till next missile
 
 def getUsers():
-    snapshot = firebase.get(('/%s/users' % appVersion), None)
+    snapshot = firebase.get(('/%s/players' % appVersion), None)
     users = []
     epoch_time = int(time.time())
 
@@ -268,7 +322,7 @@ def getUsers():
 
     for uid in snapshot:
         user = snapshot[uid]
-        user['untilNextMissile'] = ( user['nextMissile'] - epoch_time )/ (60)
+        # user['untilNextMissile'] = ( user['nextMissile'] - epoch_time )/ (60)
         users.append(user)
 
     return users
