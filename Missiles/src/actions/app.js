@@ -71,10 +71,13 @@ export function logIn(username,playersRef) {
 
     // const { pushToken } = this.state;
 
+    const { dataRef } = getState().firebase;
+
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then(function(authData) {
       // Update player data
-      playersRef
+      dataRef
+        .child('players')
         .child(authData.uid)
         .update({ balance: 100, uid: authData.uid, username, permissions, pushToken, loggedInAt: Date.now() });
 
