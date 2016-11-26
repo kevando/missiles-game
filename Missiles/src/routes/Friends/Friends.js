@@ -23,7 +23,8 @@ class Friends extends Component {
 
 
   onTargetPress(target) {
-    if(target.location)
+    const { user } = this.props;
+    if(target.location && target.uid != user.uid)
       this.setState({target});
     else
       alert('This target is not available for some reason')

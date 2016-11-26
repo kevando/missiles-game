@@ -7,6 +7,7 @@ React Native &amp; Appengine
 ### Todo
  - 'incoming' missile screen + notifications
  - coin server (celery python plugin)
+ - create better structure for appengine code, versioning
 
 
 
