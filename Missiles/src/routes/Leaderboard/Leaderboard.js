@@ -1,15 +1,14 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 
-import Routes from '../../config/routes';
 import Button from '../../components/Button';
 import styles from './styles';
 
 import Emoji from 'react-native-emoji';
 import _ from 'lodash';
 
-const News = (props) => {
-  const { players, navigator } = props;
+const Leaderboard = (props) => {
+  const { players } = props;
 
   var n00b = _.maxBy(players, 'loggedInAt');
   var topDawg = _.maxBy(players, (p) => { return p.frags; });
@@ -28,29 +27,32 @@ const News = (props) => {
         <View style={styles.title}>
           <Text style={styles.titleMissile}>MISSILE</Text>
           <Text style={styles.titleNews}>NEWS</Text>
+          <Text style={styles.contentTitle}>Page 2</Text>
         </View>
 
 
         <View style={styles.content}>
-          <Text onPress={() => navigator.push(Routes.getLeaderboardRoute())} style={styles.contentTitle}>CAN ANYONE STOP {topDawg.username.toUpperCase()}?? {"\n"}<Emoji name="fire" /><Emoji name="fire" /><Emoji name="fire" /></Text>
-          <Text style={styles.faceEmoji}><Emoji name="scream_cat" /></Text>
+
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={{flex:3}}><Text style={{fontSize:14}}>Username</Text></View>
+          <View style={{flex:1}}><Text style={{fontSize:14}}>Frags</Text></View>
+          <View style={{flex:1}}><Text style={{fontSize:14}}>Deaths</Text></View>
         </View>
 
+          {
+            _.map(players, function(player,i) {
+              return(
+                <View style={{flex: 1,flexDirection: 'row'}} key={i}>
+                  <View style={{flex:3}}><Text style={{fontSize:12}}>{player.username}</Text></View>
+                  <View style={{flex:1}}><Text style={{fontSize:14}}>{player.frags}</Text></View>
+                  <View style={{flex:1}}><Text style={{fontSize:14}}>{player.deaths}</Text></View>
+                </View>
+              )
+            })
+          }
 
-      </View>
-
-      <View style={styles.bottom}>
-
-
-
-        <View style={styles.footerTop}>
-          <Text style={styles.footerTitle}>{n00b.username.toUpperCase()} is charged up and ready</Text>
-          <Text style={styles.footerEmojis}><Emoji name="battery" /><Emoji name="electric_plug" /><Emoji name="crystal_ball" /><Emoji name="hole" /></Text>
         </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}><Emoji name="no_smoking" /><Emoji name="no_smoking" />SMOKING KILLS<Emoji name="no_smoking" /> <Emoji name="no_smoking" /></Text>
-        </View>
 
       </View>
 
@@ -60,7 +62,7 @@ const News = (props) => {
 };
 
 
-export default News;
+export default Leaderboard;
 
 //<Text style={styles.backgroundEmoji}><Emoji name="statue_of_liberty" /></Text>
 

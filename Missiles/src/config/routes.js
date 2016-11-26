@@ -1,6 +1,7 @@
 import React from 'react';
 import Stockpile from '../routes/Stockpile';
 import News from '../routes/News';
+import Leaderboard from '../routes/Leaderboard';
 import Welcome from '../routes/Welcome';
 import Profile from '../routes/Profile';
 import SignIn from '../routes/SignIn';
@@ -13,7 +14,9 @@ import Location from '../routes/Location';
 
 export const routes = {
 
+  // --------------------------------------------------------------------
   // NEWS ROUTE
+  // --------------------------------------------------------------------
 
   getNewsRoute() {
     return {
@@ -30,8 +33,26 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
+  // LEADERBOARD ROUTE
+  // --------------------------------------------------------------------
 
+  getLeaderboardRoute() {
+    return {
+      renderScene(navigator) {
+        return <Leaderboard navigator={navigator} />;
+      },
+
+      getTitle() {
+        return 'Leaderboard';
+      },
+
+      showNavigationBar: false,
+    };
+  },
+
+  // --------------------------------------------------------------------
   // WELCOME ROUTE
+  // --------------------------------------------------------------------
 
   getWelcomeRoute() {
     return {
@@ -48,8 +69,8 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
-
   // STOCKPILE ROUTE
+  // --------------------------------------------------------------------
 
   getStockpileRoute() {
     return {
@@ -65,8 +86,8 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
-
   // MARKET ROUTE
+  // --------------------------------------------------------------------
 
   getMarketRoute() {
     return {
@@ -81,8 +102,8 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
-
   // FRIENDS ROUTE (Pre Launch)
+  // --------------------------------------------------------------------
 
   getFriendsRoute() {
     return {
@@ -98,8 +119,8 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
-
   // LAUNCH ROUTE
+  // --------------------------------------------------------------------
 
   getLaunchRoute(target, weapon) {
     return {
@@ -116,8 +137,8 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
-
   // HISTORY ROUTE
+  // --------------------------------------------------------------------
 
   getHistoryRoute() {
     return {
@@ -134,8 +155,8 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
-
   // LOCATION ROUTE (For Testing)
+  // --------------------------------------------------------------------
 
   getLocationRoute() {
     return {
@@ -151,20 +172,25 @@ export const routes = {
     };
   },
 
+  // 
+  //
+  //
+  //
+  //
+  // getMapsRoute() {
+  //   return {
+  //     renderScene(navigator) {
+  //       return <Maps navigator={navigator} />;
+  //     },
+  //
+  //     showNavigationBar: false,
+  //   };
+  // },
 
+  // --------------------------------------------------------------------
+  //  PROFILE ROUTE
+  // --------------------------------------------------------------------
 
-
-
-
-  getMapsRoute() {
-    return {
-      renderScene(navigator) {
-        return <Maps navigator={navigator} />;
-      },
-
-      showNavigationBar: false,
-    };
-  },
   getProfileRoute() {
     return {
       renderScene(navigator) {
@@ -174,6 +200,11 @@ export const routes = {
       showNavigationBar: false,
     };
   },
+
+  // --------------------------------------------------------------------
+  //  SIGN IN ROUTE
+  // --------------------------------------------------------------------
+
   getSignInRoute() {
     return {
       renderScene(navigator) {

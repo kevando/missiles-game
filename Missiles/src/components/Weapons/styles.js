@@ -33,4 +33,9 @@ export default StyleSheet.create({
     height: 70
   },
 
+  largeImage: {
+    width: window.width,
+    height: 70
+  },
+
 });

@@ -11,6 +11,13 @@ export default StyleSheet.create({
     paddingTop: 50,
   },
 
+  headerText: {
+    fontSize: 30,
+    color: colors.headerText,
+    fontWeight: '600',
+    fontStyle: 'italic',
+  },
+
   listItem: {
     flex: 1,
     backgroundColor: '#eee',

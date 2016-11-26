@@ -61,15 +61,24 @@ export function setImpact(weapon) {
     var missile = _.cloneDeep(weapon);
 
     var impactDistance = getImpactDistance(weapon);
-    alert(impactDistance);
-
-    missile.frag = impactDistance < 1 ? true : false;
-
+    // alert(impactDistance);
     missile.impactDistance = impactDistance;
+
+    if(impactDistance < 1){
+      // if they got close, give them a 40% of getting the frag
+      var randomN = Math.random();
+      alert(randomN)
+
+      missile.frag = randomN < 0.4 ? true : false;
+    }
+
+    if(missile.frag){
+      alert('YOUR MISSILE HIT THEM!');
+    } else {
+      alert('YOUR MISSILE MISSED THEM!');
+    }
+
     const { dataRef } = getState().firebase;
-
-
-
 
     // update weapon in missile list
     dataRef

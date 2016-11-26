@@ -193,7 +193,7 @@ class Launch extends React.Component {
 
     const { setImpact, weapon } = this.props;
     // Redux
-    alert(missile.name)
+    // alert(missile.name)
     setImpact(missile);
 
 
@@ -358,16 +358,9 @@ class Launch extends React.Component {
 
 
         <View style={styles.buttonContainer}>
-        {this.state.targetMarker && !this.state.launched && !this.state.weapon && !this.state.destination &&
-          <TouchableOpacity
-            onPress={this.setDestination.bind(this)}
-            style={[styles.bubble, styles.button]}
-          >
-            <Text>Set Target Destination</Text>
-          </TouchableOpacity>
-          }
 
-          {this.state.targetMarker && !this.state.launched && !this.state.weapon && this.state.destination &&
+
+          {this.state.targetMarker && this.state.distance != 'unknown' &&
             <TouchableOpacity
               onPress={this.fireMissile.bind(this)}
               style={[styles.bubble, styles.button]}
@@ -382,7 +375,11 @@ class Launch extends React.Component {
 
         </View>
         <View style={styles.navContainer}>
-          <Text style={styles.distance}>Target Distance: {this.state.distance}</Text>
+        {this.state.targetMarker && this.state.destination != 'unknown' ?
+          <Text style={styles.distance}>Target Distance: {this.state.distance}</Text> :
+          <Text style={styles.distance}>WHERE IS THIS PERSON?</Text>
+        }
+
         </View>
 
 
