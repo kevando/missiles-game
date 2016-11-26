@@ -60,6 +60,7 @@ export const routes = {
       getTitle() {
         return 'Stockpile';
       },
+      // showNavigationBar: false
     };
   },
 

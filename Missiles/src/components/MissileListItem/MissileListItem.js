@@ -10,7 +10,7 @@ const MissileListItem = (props) => {
   return (
 
       <View style={styles.container}>
-        <H2>You fired a missile at Aidan</H2>
+        <H2>{missile.sender.username} fired a missile at {missile.target.username}</H2>
       </View>
 
   );
