@@ -11,6 +11,8 @@ import {
 import MapView, { MAP_TYPES } from 'react-native-maps';
 
 import missileImg from '../../images/missileIcon.png';
+import peaceIcon from '../../images/peaceIcon.png';
+import explosionIcon from '../../images/explosionIcon.png';
 
 import Emoji from 'react-native-emoji';
 import _ from 'lodash';
@@ -20,11 +22,11 @@ const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 
 
-// cincy
-const LATITUDE = 39.103197;
+// lexington
+const LATITUDE = 38.103197;
 const LONGITUDE = -84.506488;
 
-const LATITUDE_DELTA = 0.922;
+const LATITUDE_DELTA = 2.122;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
@@ -65,14 +67,6 @@ class Launch extends React.Component {
 
       weapon: null,
 
-      currentRegion: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-
-
       targetMarker: null,
 
       missileCoordinate: new MapView.AnimatedRegion({
@@ -95,31 +89,35 @@ class Launch extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
 
-    // navigator.geolocation.getCurrentPosition(
-    //   (position) => {
-    //    console.log('getCurrentPosition',position);
-    //     this.setState({currentRegion: {
-    //       latitude: position.coords.latitude,
-    //       longitude: position.coords.longitude,
-    //       latitudeDelta: LATITUDE_DELTA,
-    //       longitudeDelta: LONGITUDE_DELTA,
-    //     }});
-    //   },
-    //   (error) => alert(error.message),
-    //   {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    // );
-    // this.watchID = navigator.geolocation.watchPosition((position) => {
-    //    console.log('watchPosition',position);
-    //   this.setState({currentRegion: {
-    //       latitude: position.coords.latitude,
-    //       longitude: position.coords.longitude,
-    //       latitudeDelta: LATITUDE_DELTA,
-    //       longitudeDelta: LONGITUDE_DELTA,
-    //     }});
-    //
-    // })
+    // SET CURRENT REGION as users locaton
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+       console.log('getCurrentPosition',position);
+
+       currentRegion = {
+         latitude: position.coords.latitude,
+         longitude: position.coords.longitude,
+         latitudeDelta: LATITUDE_DELTA,
+         longitudeDelta: LONGITUDE_DELTA,
+       };
+        this.setState({currentRegion});
+      },
+      (error) => alert(error.message),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+       console.log('watchPosition',position);
+       currentRegion = {
+         latitude: position.coords.latitude,
+         longitude: position.coords.longitude,
+         latitudeDelta: LATITUDE_DELTA,
+         longitudeDelta: LONGITUDE_DELTA,
+       };
+      this.setState({currentRegion});
+
+    })
 
     const { target } = this.props;
     console.log(target)
@@ -193,14 +191,8 @@ class Launch extends React.Component {
 
     const { setImpact, weapon } = this.props;
     // Redux
-    // alert(missile.name)
     setImpact(missile);
-
-
     this.setFlightPath();
-
-
-
   }
 
 
@@ -281,6 +273,7 @@ class Launch extends React.Component {
 
 
   render() {
+    if(!this.state.currentRegion) return <View />
     // console.log(this.state);
 
     // no fucking clue why map wont work in the Callout
@@ -302,8 +295,10 @@ class Launch extends React.Component {
           scrollEnabled={this.state.scrollEnabled}
           pitchEnabled={true}
           rotateEnabled={false}
+          mapType='satellite'
 
         >
+
 
         {this.state.launched &&
           <MapView.Marker.Animated
@@ -360,7 +355,7 @@ class Launch extends React.Component {
         <View style={styles.buttonContainer}>
 
 
-          {this.state.targetMarker && this.state.distance != 'unknown' &&
+          {this.state.targetMarker && this.state.distance != 'unknown' && !this.state.launched &&
             <TouchableOpacity
               onPress={this.fireMissile.bind(this)}
               style={[styles.bubble, styles.button]}
@@ -368,16 +363,22 @@ class Launch extends React.Component {
               <Text>FIRE</Text>
             </TouchableOpacity>
 
-
-
             }
+
+            {this.state.flightpath && this.state.launched &&
+              <TouchableOpacity style={[styles.bubble, styles.button]} onPress={() => navigator.push(Routes.getFriendsRoute()) } >
+                <Text>Go Back</Text>
+              </TouchableOpacity>
+            }
+
+
 
 
         </View>
         <View style={styles.navContainer}>
-        {this.state.targetMarker && this.state.destination != 'unknown' ?
-          <Text style={styles.distance}>Target Distance: {this.state.distance}</Text> :
-          <Text style={styles.distance}>WHERE IS THIS PERSON?</Text>
+        {this.state.targetMarker && this.state.destination != 'unknown' &&
+          <Text style={styles.distance}>TARGET: {this.props.target.username}</Text>
+
         }
 
         </View>

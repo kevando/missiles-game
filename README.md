@@ -1,25 +1,11 @@
 # Missiles
 React Native &amp; Appengine 
 
+### Game Play
+All players have global access to fire at each other. 1 type of missile that takes 5 seconds to land. frag is determined by random 40% if you strike within 1km
 
-## Development - version 2
 
 ### Todo
- - 'incoming' missile screen + notifications
- - coin server (celery python plugin)
- - create better structure for appengine code, versioning
 
+ - issue creating user on login still exists. It write just location to the profile, so I think there is a situation where it tries to write to the same ref at the same time
 
-
-### Release Notes
- - BG tracking cares about battery
- - Missile News
- - Added redux
- - Added Austen missile designs
-
-
-
-
-## Release History
-
-### Version 1 (release nov1)

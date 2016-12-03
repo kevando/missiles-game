@@ -33,55 +33,55 @@ export function checkConnection(connectedRef) {
   }
 }
 
-export function listenForAuthChanges(playersRef) {
-  return dispatch => {
-
-    // Do I need to unsubscribe to this?
-  // this.unsubscribe = firebase.auth().onAuthStateChanged(function(authData) {
+export function listenForAuthChanges() {
+  return (dispatch, getState) => {
     firebase.auth().onAuthStateChanged(function(authData) {
-
       if(authData) {
         dispatch({ type: USER_LOGGED_IN, authData });
-        // Save uid to disk because bg local is being a bitch in Missiles.js
+        
+        // Save uid to disk so bg-geo can grab uid
         store.save('user', { uid: authData.uid });
+        // Update player data (back up because logIn is fucking up)
+        const { dataRef } = getState().firebase;
+        dataRef
+          .child('players')
+          .child(authData.uid)    // This will overwrite the users balance if it exists, but whatever
+          .update({ balance: 101, uid: authData.uid, loggedInAt: Date.now() });
 
-        // dispatch({ type: UPDATE_PLAYER, authData });
-        // updateState({authData});
-        // setUser(authData);
-        // I think this only gets called once, so I should be good to call it here
-        // startLocationTracking();
       } else {
         // This will clear the user object and redirect user to signIn page
         dispatch({ type: USER_LOGGED_OUT });
       }
     });
-
   }
 }
 
 
-export function logIn(username,playersRef) {
+export function logIn(username) {
   return (dispatch, getState) => {
+
     dispatch({ type: USER_LOGGING_IN });
 
-    const { pushToken, permissions, } = getState().app;
-
-    var email = username+"@kevinhabich.com"; // tmp
-    var password = "12345678"; // tmp
-
-    // const { pushToken } = this.state;
+    const { pushToken, permissions } = getState().app;
+    const email = username+"@kevinhabich.com"; // tmp
+    const password = "12345678"; // tmp
 
     const { dataRef } = getState().firebase;
 
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then(function(authData) {
+
+      // Something is fucking up here, that is preventing firebase user data from being written
+      if(!permissions) alert('Permissions are not set! Please log out and log back in')
+      if(!pushToken) alert('Push Token is not set!  Please log out and log back in')
+      if(!authData.uid) alert('authData.uid is not set! WTF  Please log out and log back in')
+
+
       // Update player data
       dataRef
         .child('players')
-        .child(authData.uid)
-        .update({ balance: 100, uid: authData.uid, username, permissions, pushToken, loggedInAt: Date.now() });
-
-        // This will overwrite the users balance if it exists, but whatever
+        .child(authData.uid)    // This will overwrite the users balance if it exists, but whatever
+        .update({ deaths: 0, frags: 0, balance: 100, uid: authData.uid, username, permissions, pushToken, loggedInAt: Date.now() });
     })
     .catch(function(error) {
       console.log('register auth cb error:',error)

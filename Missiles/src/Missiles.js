@@ -61,7 +61,7 @@ class Missiles extends Component {
 
       // attempts to save battery
       // disabling while in dev mode
-      // useSignificantChangesOnly: true,
+      useSignificantChangesOnly: true,
 
       debug: false, // <-- enable for debug sounds & notifications
       logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
@@ -96,11 +96,12 @@ class Missiles extends Component {
     const { dataRef } = this.props;
     store.get('user')
       .then(user => {
-
-        dataRef
-          .child('players')
-          .child(user.uid)
-          .update({location});
+        if(user) {
+          dataRef
+            .child('players')
+            .child(user.uid)
+            .update({location});
+        }
 
       })
 
@@ -163,8 +164,8 @@ class Missiles extends Component {
     const { connected, authData, user, players, initialized, loggingIn } = this.props;
 
 
-    // if (!connected || players.length <= 0 ) {
-      if (!connected) {
+
+    if (!connected) {
       return <Loading message="Connecting" />;
 
     } else if (loggingIn) {

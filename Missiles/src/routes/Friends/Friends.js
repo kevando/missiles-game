@@ -35,8 +35,19 @@ class Friends extends Component {
       return;
     }
     if(target.username == this.state.target.username){
-      return {backgroundColor: 'red'}
+      return {backgroundColor: '#ddd',fontWeight:'800'}
     }
+    return {backgroundColor: '#fff',color:'#ccc'}
+  }
+
+  getEmoji(target) {
+    if(!this.state.target){
+      return 'neutral_face';
+    }
+    if(target.username == this.state.target.username){
+      return 'cold_sweat';
+    }
+    return 'sweat_smile';
   }
 
   render() {
@@ -54,17 +65,19 @@ class Friends extends Component {
 
       {
         _.map(players,(target,i) => {
-          return (
-            <TouchableOpacity  onPress={this.onTargetPress.bind(this,target) }  key={i} >
-            <View style={[styles.listItem,this.getStyle(target)]}>
-              <H2><Emoji name="smiley" />{`Fire at ${target.username}`}</H2>
-              {target.location && user.username == 'kevin' &&
-                <Text>{`Last heard from ${moment(target.location.timestamp).fromNow()}`}</Text>
-              }
+          if(target.location && target.uid != user.uid) {
 
-            </View>
-            </TouchableOpacity>
-          )
+            return (
+              <TouchableOpacity onPress={this.onTargetPress.bind(this,target) }  key={i} >
+                <Text style={[styles.listItem,this.getStyle(target)]}>
+                  <H2><Emoji name={this.getEmoji(target)} />{`Fire at ${target.username}`}</H2>
+                  {target.location && user.username == 'kevin' &&
+                    <Text>{`Last heard from ${moment(target.location.timestamp).fromNow()}`}</Text>
+                  }
+                </Text>
+              </TouchableOpacity>
+            )
+          } // do not show self, or users that do not have location set
         })
       }
 

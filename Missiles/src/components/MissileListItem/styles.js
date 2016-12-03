@@ -3,10 +3,10 @@ import { colors } from '../../config/styles';
 
 export default StyleSheet.create({
   container: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#ccc',
-    margin: 5,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    backgroundColor: '#ddd',
+    marginBottom: 1,
     flex: 1
   },
   buttonText: {

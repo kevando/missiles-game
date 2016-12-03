@@ -66,6 +66,7 @@ export function setImpact(weapon) {
     var impactDistance = getImpactDistance(weapon);
     // alert(impactDistance);
     missile.impactDistance = impactDistance;
+    missile.status = 'landed';
 
     if(impactDistance < 1){
       // if they got close, give them a 40% of getting the frag

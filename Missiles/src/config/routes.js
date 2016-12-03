@@ -133,6 +133,7 @@ export const routes = {
       },
 
       showNavigationBar: false, // gets inherited?
+      showTabBar: false, // gets inherited?
     };
   },
 
@@ -172,7 +173,7 @@ export const routes = {
     };
   },
 
-  // 
+  //
   //
   //
   //

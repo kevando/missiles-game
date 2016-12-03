@@ -20,10 +20,12 @@ class Stockpile extends Component {
       <View style={styles.container}>
 
       <View style={styles.header}>
-        {user.weapons &&  <Text style={styles.headerText}>You have missiles</Text>}
+        {user.weapons ?
+          <Text style={styles.headerText}>You have missiles</Text>
+        :
+          <Text>You have no missiles</Text>
+        }
       </View>
-
-
 
 
       {
