@@ -102,8 +102,8 @@ class CoinsGenerator(webapp2.RequestHandler):
 
     def get(self):
 
-        # Give all players 5 coins (via cron every 5 minutes)
-        disperseCoins(15)
+        # Give all players 4 coins (via cron every 5 minutes)
+        disperseCoins(4)
 
         self.response.write('Coins added')
 
