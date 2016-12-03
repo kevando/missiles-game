@@ -71,17 +71,16 @@ export function setImpact(weapon) {
     if(impactDistance < 1){
       // if they got close, give them a 40% of getting the frag
       var randomN = Math.random();
-      alert(randomN)
 
       missile.frag = randomN < 0.4 ? true : false;
     }
 
     if(missile.frag){
-      alert('YOUR MISSILE HIT THEM!');
+      alert('You HIT '+weapon.target.username+'!');
       FirebaseClient.notifyTargetImpact(missile);
 
     } else {
-      alert('YOUR MISSILE MISSED THEM!');
+      alert('You MISSED '+weapon.target.username+'!');
       FirebaseClient.notifyTargetImpact(missile);
     }
 

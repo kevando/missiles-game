@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Animated,
+  Vibration,
 } from 'react-native';
 
 import MapView, { MAP_TYPES } from 'react-native-maps';
@@ -13,6 +14,9 @@ import MapView, { MAP_TYPES } from 'react-native-maps';
 import missileImg from '../../images/missileIcon.png';
 import peaceIcon from '../../images/peaceIcon.png';
 import explosionIcon from '../../images/explosionIcon.png';
+import crossIco from '../../images/crossIco.png';
+
+import Routes from '../../config/routes';
 
 import Emoji from 'react-native-emoji';
 import _ from 'lodash';
@@ -26,7 +30,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 38.103197;
 const LONGITUDE = -84.506488;
 
-const LATITUDE_DELTA = 2.122;
+const LATITUDE_DELTA = 7.122;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
@@ -53,6 +57,17 @@ function getDistance(destinationCoordinate) {
   return Math.round(distance * 100) / 100 // round to nearest 1000th
 }
 
+function angle(cx, cy, ex, ey) {
+  var dy = ey - cy;
+  var dx = ex - cx;
+  var theta = Math.atan2(dy, dx); // range (-PI, PI]
+  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+  //if (theta < 0) theta = 360 + theta; // range [0, 360)
+  var thetaWhole = Math.round(theta);
+  // alert(thetaWhole);
+  return thetaWhole
+}
+
 class Launch extends React.Component {
   constructor(props) {
     super(props);
@@ -69,10 +84,10 @@ class Launch extends React.Component {
 
       targetMarker: null,
 
-      missileCoordinate: new MapView.AnimatedRegion({
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-      }),
+      // missileCoordinate: new MapView.AnimatedRegion({
+      //   latitude: LATITUDE,
+      //   longitude: LONGITUDE,
+      // }),
 
       missileMarker: null,
 
@@ -92,6 +107,7 @@ class Launch extends React.Component {
   componentWillMount() {
 
     // SET CURRENT REGION as users locaton
+    var currentRegion;
     navigator.geolocation.getCurrentPosition(
       (position) => {
        console.log('getCurrentPosition',position);
@@ -103,6 +119,24 @@ class Launch extends React.Component {
          longitudeDelta: LONGITUDE_DELTA,
        };
         this.setState({currentRegion});
+        this.setState({
+          senderMarker: {
+              coordinate: {
+                latitude: currentRegion.latitude,
+                longitude: currentRegion.longitude,
+              },
+            },
+            missileCoordinate: new MapView.AnimatedRegion({
+              latitude: currentRegion.latitude,
+              longitude: currentRegion.longitude,
+            }),
+            missileMarker: {
+              coordinate: new MapView.AnimatedRegion({
+                latitude: currentRegion.latitude,
+                longitude: currentRegion.longitude,
+              }),
+            }
+        });
       },
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
@@ -116,36 +150,38 @@ class Launch extends React.Component {
          longitudeDelta: LONGITUDE_DELTA,
        };
       this.setState({currentRegion});
+      this.setState({
+        senderMarker: {
+            coordinate: {
+              latitude: currentRegion.latitude,
+              longitude: currentRegion.longitude,
+            },
+          },
+          missileCoordinate: new MapView.AnimatedRegion({
+            latitude: currentRegion.latitude,
+            longitude: currentRegion.longitude,
+          }),
+          missileMarker: {
+            coordinate: new MapView.AnimatedRegion({
+              latitude: currentRegion.latitude,
+              longitude: currentRegion.longitude,
+            }),
+          }
+      });
 
-    })
-
-    const { target } = this.props;
-    console.log(target)
+    });
 
     this.setState({
-      senderMarker: {
-          coordinate: {
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-          },
-          // key: id++,
-          color: 'blue',
-        },
-
-      // Debug. Set Target marker
       targetMarker: {
-          coordinate: {
-            latitude: target.location.coords.latitude,
-            longitude: target.location.coords.longitude,
-          },
-          color: 'green',
-        },
+    coordinate: {
+      latitude: this.props.target.location.coords.latitude,
+      longitude: this.props.target.location.coords.longitude,
+    },
+    color: 'green',
+},
 
-      missileMarker: {
-        coordinate: this.state.missileCoordinate,
-
-      }
     });
+
 
 
   }
@@ -180,10 +216,10 @@ class Launch extends React.Component {
             coordinate: e.nativeEvent.coordinate,
             color: 'red',
           },
-          distance: getDistance(e.nativeEvent.coordinate)
+          distance: getDistance(e.nativeEvent.coordinate),
+          missileDirection: angle(this.state.currentRegion.latitude,this.state.currentRegion.longitude,e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
       });
-      // callout doesnt show up by default
-      // this.marker1.showCallout(); not working wtf whatever
+
     }
   }
 
@@ -193,6 +229,10 @@ class Launch extends React.Component {
     // Redux
     setImpact(missile);
     this.setFlightPath();
+    this.setState({impact:true})
+    Vibration.vibrate();
+
+    // set explosion
   }
 
 
@@ -274,11 +314,8 @@ class Launch extends React.Component {
 
   render() {
     if(!this.state.currentRegion) return <View />
-    // console.log(this.state);
 
-    // no fucking clue why map wont work in the Callout
-    // const availableWeapons = _.map(this.props.availableWeapons,(weapon,i) => {return (<Text key={i} onPress={(weapon) => this.onWeaponSelect}>{weapon.name}</Text>) })
-    const weapon = this.props.weapon;
+    const {weapon, navigator} = this.props;
 
     return (
       <View style={styles.container}>
@@ -300,42 +337,21 @@ class Launch extends React.Component {
         >
 
 
+
+
         {this.state.launched &&
           <MapView.Marker.Animated
             coordinate={this.state.missileMarker.coordinate}
             image={missileImg}
-
+            style={{transform: [{rotate: this.state.missileDirection+'deg'}],}}
           />
         }
-        {this.state.targetMarker &&
-          <MapView.Marker
-            coordinate={this.state.targetMarker.coordinate}
-            pinColor={this.state.targetMarker.color}
-            ref={ref => { this.marker1 = ref; }}
 
-          >
-            <MapView.Callout style={styles.plainView}  >
-
-              <View>
-                <Text style={{fontWeight:'700'}}><Emoji name="radio" /></Text>
-
-
-              </View>
-            </MapView.Callout>
-          </MapView.Marker>
-        }
-
-        {this.state.senderMarker &&
-          <MapView.Marker
-            coordinate={this.state.senderMarker.coordinate}
-            pinColor={this.state.senderMarker.color}
-          />
-        }
 
         {this.state.targetMarker &&
           <MapView.Marker
             coordinate={this.state.targetMarker.coordinate}
-            pinColor={this.state.targetMarker.color}
+            image={crossIco}
           />
         }
 
@@ -345,7 +361,7 @@ class Launch extends React.Component {
               coordinates={this.state.flightPath.coordinates}
               strokeColor="#F00"
               fillColor="rgba(255,0,0,0.5)"
-              strokeWidth={3}
+              strokeWidth={2}
             />
           }
 
@@ -365,9 +381,9 @@ class Launch extends React.Component {
 
             }
 
-            {this.state.flightpath && this.state.launched &&
-              <TouchableOpacity style={[styles.bubble, styles.button]} onPress={() => navigator.push(Routes.getFriendsRoute()) } >
-                <Text>Go Back</Text>
+            {this.state.impact &&
+              <TouchableOpacity style={[styles.bubble, styles.button,{backgroundColor:'blue'}]} onPress={() => navigator.push(Routes.getFriendsRoute()) } >
+                <Text style={{color:'white'}}>EXIT</Text>
               </TouchableOpacity>
             }
 

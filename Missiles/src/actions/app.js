@@ -38,15 +38,11 @@ export function listenForAuthChanges() {
     firebase.auth().onAuthStateChanged(function(authData) {
       if(authData) {
         dispatch({ type: USER_LOGGED_IN, authData });
-        
+
         // Save uid to disk so bg-geo can grab uid
         store.save('user', { uid: authData.uid });
         // Update player data (back up because logIn is fucking up)
-        const { dataRef } = getState().firebase;
-        dataRef
-          .child('players')
-          .child(authData.uid)    // This will overwrite the users balance if it exists, but whatever
-          .update({ balance: 101, uid: authData.uid, loggedInAt: Date.now() });
+        
 
       } else {
         // This will clear the user object and redirect user to signIn page
