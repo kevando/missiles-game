@@ -23,6 +23,8 @@ import styles from './styles';
 
 import _ from 'lodash';
 
+import Modal from 'react-native-simple-modal';
+
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
@@ -104,6 +106,9 @@ class Launch extends React.Component {
       polylines: [],
       editing: null,
       flightPath: null,
+      modalOpen: false,
+
+
     };
   }
 
@@ -144,35 +149,7 @@ class Launch extends React.Component {
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-       console.log('watchPosition',position);
-       currentRegion = {
-         latitude: position.coords.latitude,
-         longitude: position.coords.longitude,
-         latitudeDelta: LATITUDE_DELTA,
-         longitudeDelta: LONGITUDE_DELTA,
-       };
-      this.setState({currentRegion});
-      this.setState({
-        senderMarker: {
-            coordinate: {
-              latitude: currentRegion.latitude,
-              longitude: currentRegion.longitude,
-            },
-          },
-          missileCoordinate: new MapView.AnimatedRegion({
-            latitude: currentRegion.latitude,
-            longitude: currentRegion.longitude,
-          }),
-          missileMarker: {
-            coordinate: new MapView.AnimatedRegion({
-              latitude: currentRegion.latitude,
-              longitude: currentRegion.longitude,
-            }),
-          }
-      });
 
-    });
 //
 //     this.setState({
 //       targetMarker: {
@@ -189,23 +166,16 @@ class Launch extends React.Component {
 
   }
 
+  componentWillUnmount(){
+    // this.watchID();
+  }
+
   onRegionChange(region) {
     this.setState({ region });
   }
 
 
-  onMapPress(e) {
-    if(true){
-      this.setState({
-        location: {
-            coordinate: e.nativeEvent.coordinate,
-          },
-          // distance: getDistance(e.nativeEvent.coordinate),
-          // missileDirection: angle(this.state.currentRegion.latitude,this.state.currentRegion.longitude,e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
-      });
 
-    }
-  }
 
   setImpact(missile) {
 
@@ -237,21 +207,21 @@ class Launch extends React.Component {
 
   fireMissile() {
 
-    const { fireMissile, weapon, target, user } = this.props;
+    const { fireMissile, weapon, user } = this.props;
 
 
 
-    var missile = _.cloneDeep(weapon);
+    var missile = _.cloneDeep(weapon.missile);
 
     missile.sender = user;
-    missile.target = target;
+    // missile.target = target;
     missile.status = 'airborn';
     missile.firedAt = Date.now();
-    missile.destination = {latitude: this.state.targetMarker.coordinate.latitude, longitude: this.state.targetMarker.coordinate.longitude}
+    missile.destination = weapon.location;//{latitude: this.state.targetMarker.coordinate.latitude, longitude: this.state.targetMarker.coordinate.longitude}
 
-    // Redux (bad name)
+    // Redux
     fireMissile(missile);
-    // Where does notification happen?
+
 
 
 
@@ -261,19 +231,19 @@ class Launch extends React.Component {
     this.setState({launched: true, zoomEnabled: false, scrollEnabled: false});
 
     this.state.missileMarker.coordinate.timing({
-      latitude: this.state.targetMarker.coordinate.latitude,
-      longitude: this.state.targetMarker.coordinate.longitude,
+      latitude: weapon.location.latitude,
+      longitude: weapon.location.longitude,
       duration: 5000,
       delay: 3000
     }).start(this.setImpact.bind(this,missile));
 
-    this.state.missileMarker.coordinate.addListener((coordinate) => this.setState({distance: getDistance(coordinate)}));
+    //this.state.missileMarker.coordinate.addListener((coordinate) => this.setState({distance: getDistance(coordinate)}));
 
 
   }
 
   fitMarkers() {
-    this.map.fitToCoordinates([this.state.senderMarker.coordinate, this.state.targetMarker.coordinate], {
+    this.map.fitToCoordinates([this.state.senderMarker.coordinate, this.props.weapon.location], {
       edgePadding: DEFAULT_PADDING,
       animated: true,
 
@@ -313,19 +283,35 @@ class Launch extends React.Component {
     }
   }
 
-  renderButton(){
-    if(this.state.location){
+  renderFireButton(){
+    const {missile,target,location} = this.props.weapon;
+    if(missile && target && location){
       return (
-          <TouchableOpacity
-            onPress={this.fireMissile.bind(this)}
-            style={styles.button}
-          >
-            <Text>FIRE MISSILE</Text>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={this.fireMissile.bind(this)}style={styles.button}>
+          <Text style={{color:'#fff'}}>FIRE MISSILE</Text>
+        </TouchableOpacity>
       )
     }
   }
 
+  onMapPress(e) {
+    this.props.setLocation(e.nativeEvent.coordinate); // Redux
+    if(true){
+      this.setState({
+        location: {
+            coordinate: e.nativeEvent.coordinate,
+          },
+          distance: getDistance(e.nativeEvent.coordinate),
+          missileDirection: angle(this.state.currentRegion.latitude,this.state.currentRegion.longitude,e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
+      });
+
+    }
+  }
+
+  onMissileSelect(missile) {
+    this.props.setMissile(missile);
+    this.setState({modalOpen: false});
+  }
 
 
   render() {
@@ -386,7 +372,7 @@ class Launch extends React.Component {
         <View style={styles.buttonContainer}>
 
 
-          { this.renderButton() }
+
 
 
 
@@ -394,14 +380,41 @@ class Launch extends React.Component {
 
         </View>
         <View style={styles.navContainer}>
-        {this.state.targetMarker && this.state.destination != 'unknown' &&
-          <Text style={styles.distance}>TARGET: {this.props.target.username}</Text>
 
+        { this.renderFireButton() }
+
+        {this.props.weapon.target &&
+          <Text style={styles.distance}>TARGET: {this.props.weapon.target.username}</Text>
+        }
+
+        {this.props.weapon.missile ?
+          <Text style={styles.distance}>MISSILE: {this.props.weapon.missile.name}</Text>
+          :
+          <Text onPress={()=>this.setState({modalOpen:true})} style={styles.chooseMissile}>Choose your missile</Text>
         }
 
         </View>
 
+        <Modal
+           offset={this.state.modalOffset}
+           open={this.state.modalOpen}
+           modalDidOpen={() => console.log('modal did open')}
+           modalDidClose={() => this.setState({modalOpen: false})}
+           style={{alignItems: 'center'}}>
+               <View>
+                {
+                  _.map(this.props.user.weapons,(weapon,i)=>{
+                    return (<TouchableOpacity
+                       style={{margin: 5}} key={i}
+                       onPress={this.onMissileSelect.bind(this,weapon)}>
+                       <Text>{weapon.name}</Text>
+                    </TouchableOpacity> )
+                  })
+                }
 
+
+               </View>
+            </Modal>
 
       </View>
     );

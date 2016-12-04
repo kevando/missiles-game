@@ -35,7 +35,13 @@ const initialState = {
   },
   loggingIn: false,
   initialized: false,
-  authData: false
+  authData: false,
+  availableMissiles: [
+    {name: 'Long Range Bomber', price: 100, image: 'missile02'},
+    {name: 'Short Range Bomber', price: 100, image: 'missile01'},
+    {name: 'Medium Range Bomber', price: 100, image: 'missile04'},
+    {name: 'Torpedo Range Bomber', price: 100, image: 'missile03'},
+  ],
 };
 
 export default function reducer(app = initialState, action) {

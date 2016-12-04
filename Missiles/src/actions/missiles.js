@@ -31,83 +31,43 @@ export function addMissile(missile) {
   }
 }
 
-export function fireMissile(missile) {
+
+
+
+export function buyMissile(weapon,coins) {
 
   return (dispatch, getState) => {
 
     const { dataRef } = getState().firebase;
+    const { uid, balance } = getState().app.user;
 
-    // delete weapon from stockpile
+    var newBalance = balance - weapon.price;
+
+    if (newBalance < 0)
+      alert('Cant buy weapon! This error should never occure in the action');
+
+    // Add weapon to user object
+    var weaponKey = dataRef
+      .child('players')
+      .child(uid)
+      .child('weapons')
+      .push(weapon).key;
+
+    // Bad redundent code, but whatever
     dataRef
       .child('players')
-      .child(missile.sender.uid)
+      .child(uid)
       .child('weapons')
-      .child(missile.weapon_key)
-      .remove();
+      .child(weaponKey)
+      .update({weapon_key: weaponKey});
 
-
-    // Add weapon to missile list
+    // Update users balance
     dataRef
-      .child('missiles')
-      .child(missile.weapon_key)
-      .update(missile);
+      .child('players')
+      .child(uid)
+      .update({balance: newBalance});
 
-    FirebaseClient.notifyTargetLaunched(missile);
-  }
-}
+    // Increment purchased counter?
 
-
-export function setImpact(weapon) {
-
-  return (dispatch, getState) => {
-
-    var missile = _.cloneDeep(weapon);
-
-    var impactDistance = getImpactDistance(weapon);
-    // alert(impactDistance);
-    missile.impactDistance = impactDistance;
-    missile.status = 'landed';
-
-    if(impactDistance < 1){
-      // if they got close, give them a 40% of getting the frag
-      var randomN = Math.random();
-
-      missile.frag = randomN < 0.4 ? true : false;
-    }
-
-    if(missile.frag){
-      alert('You HIT '+weapon.target.username+'!');
-      FirebaseClient.notifyTargetImpact(missile);
-
-    } else {
-      alert('You MISSED '+weapon.target.username+'!');
-      FirebaseClient.notifyTargetImpact(missile);
-    }
-
-    const { dataRef } = getState().firebase;
-
-    // update weapon in missile list
-    dataRef
-      .child('missiles')
-      .child(missile.weapon_key)
-      .update(missile);
-
-
-    // update player scores if its a hit
-    if(missile.frag === true){
-
-        dataRef.child('players').child(weapon.target.uid).child('deaths').transaction(function(deaths) {
-            if (deaths) {
-                deaths = deaths + 1;
-            }
-            return deaths;
-        });
-        dataRef.child('players').child(weapon.sender.uid).child('frags').transaction(function(frags) {
-            if (frags) {
-                frags = frags + 1;
-            }
-            return frags;
-        });
-    }
   }
 }

@@ -16,11 +16,9 @@ export default StyleSheet.create({
       alignItems: 'stretch',
     },
     button: {
-      width: 80,
       paddingHorizontal: 12,
       paddingVertical: 5,
       alignItems: 'center',
-      marginHorizontal: 10,
       backgroundColor: 'red',
 
     },

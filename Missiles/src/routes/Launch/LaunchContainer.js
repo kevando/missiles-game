@@ -14,10 +14,6 @@ import {
 
 import MapView, { MAP_TYPES } from 'react-native-maps';
 
-import missileImg from '../../images/missileIcon.png';
-import peaceIcon from '../../images/peaceIcon.png';
-import explosionIcon from '../../images/explosionIcon.png';
-import crossIco from '../../images/crossIco.png';
 
 import Routes from '../../config/routes';
 
@@ -112,71 +108,71 @@ export default class LaunchContainer extends React.Component {
 
   componentWillMount() {
 
-    // SET CURRENT REGION as users locaton
-    var currentRegion;
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-       console.log('getCurrentPosition',position);
-
-       currentRegion = {
-         latitude: position.coords.latitude,
-         longitude: position.coords.longitude,
-         latitudeDelta: LATITUDE_DELTA,
-         longitudeDelta: LONGITUDE_DELTA,
-       };
-        this.setState({currentRegion});
-        this.setState({
-          senderMarker: {
-              coordinate: {
-                latitude: currentRegion.latitude,
-                longitude: currentRegion.longitude,
-              },
-            },
-            missileCoordinate: new MapView.AnimatedRegion({
-              latitude: currentRegion.latitude,
-              longitude: currentRegion.longitude,
-            }),
-            missileMarker: {
-              coordinate: new MapView.AnimatedRegion({
-                latitude: currentRegion.latitude,
-                longitude: currentRegion.longitude,
-              }),
-            }
-        });
-      },
-      (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-       console.log('watchPosition',position);
-       currentRegion = {
-         latitude: position.coords.latitude,
-         longitude: position.coords.longitude,
-         latitudeDelta: LATITUDE_DELTA,
-         longitudeDelta: LONGITUDE_DELTA,
-       };
-      this.setState({currentRegion});
-      this.setState({
-        senderMarker: {
-            coordinate: {
-              latitude: currentRegion.latitude,
-              longitude: currentRegion.longitude,
-            },
-          },
-          missileCoordinate: new MapView.AnimatedRegion({
-            latitude: currentRegion.latitude,
-            longitude: currentRegion.longitude,
-          }),
-          missileMarker: {
-            coordinate: new MapView.AnimatedRegion({
-              latitude: currentRegion.latitude,
-              longitude: currentRegion.longitude,
-            }),
-          }
-      });
-
-    });
+//     // SET CURRENT REGION as users locaton
+//     var currentRegion;
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//        console.log('getCurrentPosition',position);
 //
+//        currentRegion = {
+//          latitude: position.coords.latitude,
+//          longitude: position.coords.longitude,
+//          latitudeDelta: LATITUDE_DELTA,
+//          longitudeDelta: LONGITUDE_DELTA,
+//        };
+//         this.setState({currentRegion});
+//         this.setState({
+//           senderMarker: {
+//               coordinate: {
+//                 latitude: currentRegion.latitude,
+//                 longitude: currentRegion.longitude,
+//               },
+//             },
+//             missileCoordinate: new MapView.AnimatedRegion({
+//               latitude: currentRegion.latitude,
+//               longitude: currentRegion.longitude,
+//             }),
+//             missileMarker: {
+//               coordinate: new MapView.AnimatedRegion({
+//                 latitude: currentRegion.latitude,
+//                 longitude: currentRegion.longitude,
+//               }),
+//             }
+//         });
+//       },
+//       (error) => alert(error.message),
+//       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+//     );
+//     this.watchID = navigator.geolocation.watchPosition((position) => {
+//        console.log('watchPosition',position);
+//        currentRegion = {
+//          latitude: position.coords.latitude,
+//          longitude: position.coords.longitude,
+//          latitudeDelta: LATITUDE_DELTA,
+//          longitudeDelta: LONGITUDE_DELTA,
+//        };
+//       this.setState({currentRegion});
+//       this.setState({
+//         senderMarker: {
+//             coordinate: {
+//               latitude: currentRegion.latitude,
+//               longitude: currentRegion.longitude,
+//             },
+//           },
+//           missileCoordinate: new MapView.AnimatedRegion({
+//             latitude: currentRegion.latitude,
+//             longitude: currentRegion.longitude,
+//           }),
+//           missileMarker: {
+//             coordinate: new MapView.AnimatedRegion({
+//               latitude: currentRegion.latitude,
+//               longitude: currentRegion.longitude,
+//             }),
+//           }
+//       });
+//
+//     });
+// //
 //     this.setState({
 //       targetMarker: {
 //     coordinate: {

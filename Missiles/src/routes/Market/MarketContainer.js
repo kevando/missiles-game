@@ -7,19 +7,20 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import {
-  WeaponsActions,
+  MissilesActions,
 } from '../../actions';
 
 
-function mapStateToProps({app, weapons}) {
+function mapStateToProps({app, weapon, missiles}) {
   return {
-    weapons,
+    weapon,
+    missiles: app.availableMissiles,
     user: app.user,
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(WeaponsActions, dispatch)
+  return bindActionCreators(MissilesActions, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Market)
