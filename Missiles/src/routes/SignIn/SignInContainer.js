@@ -1,21 +1,18 @@
-import React, { Component } from 'react';
-
+import React, { Component } from 'react'; 
 import SignIn from './SignIn';
+import FCM from 'react-native-fcm';
 
+export default class SignInContainer extends Component {
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as appActions from '../../actions/app'
+  componentDidMount(){
+    // push token doesnt get correctly set unless it happens after permissions
+    const { setPushToken } = this.props;
+    FCM.getFCMToken().then(token => {
+        setPushToken(token);
+    })
+  }
 
-function mapStateToProps(state) {
-  return {
-    playersRef: state.firebase.playersRef,
-    loggingIn: state.app.loggingIn,
+  render(){
+    return <SignIn {...this.props} />
   }
 }
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(appActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn)

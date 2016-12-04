@@ -27,22 +27,22 @@ class Welcome extends Component {
   }
 
   componentDidMount() {
-    const { setPushToken } = this.props;
+    // const { setPushToken } = this.props;
 
-    store.save('coffee', {isAwesome: true,flavor:'kevando'});
+    // store.save('coffee', {isAwesome: true,flavor:'kevando'});
 
     this._checkPermissions();
 
     // not sure if I need to enable fcm permissions specifically
     // FCM.requestPermissions();
 
-    FCM.getFCMToken().then(token => {
-      console.log("TOKEN (getFCMToken)", token);
-
-      // this.setState({pushToken: token});
-      setPushToken(token);
-
-    });
+    // FCM.getFCMToken().then(token => {
+    //   console.log("TOKEN (getFCMToken)", token);
+    //
+    //   // this.setState({pushToken: token});
+    //   setPushToken(token);
+    //
+    // });
 
 
   }
