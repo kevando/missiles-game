@@ -24,7 +24,7 @@ export const Colors = {
 // Title Defaults
 
 export const Title = {
-  fontSize: 50,
+  fontSize: 20,
   // fontFamily: 'Baskerville', // default for now
   color: Colors.black,
   letterSpacing: 1.1,

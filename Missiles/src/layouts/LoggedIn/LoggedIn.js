@@ -37,6 +37,9 @@ class LoggedIn extends React.Component {
           initialRoute={initialRoute}
           style={{ flex: 1 }}
           sceneStyle={sceneStyle}
+          navigationBarStyle={styles.navigationBarStyle}
+          titleStyle={styles.navTitleStyle}
+          barButtonTextStyle={styles.barButtonTextStyle}
           showNavigationBar={initialRoute.showNavigationBar}
         />
       </TabNavigator.Item>
@@ -44,7 +47,6 @@ class LoggedIn extends React.Component {
   }
 
   render() {
-    let tabBarHeight = 90;
     return (
       <TabNavigator tabBarStyle={styles.tabBarStyle} sceneStyle={styles.sceneStyle}>
         {this.renderTabItem('Home', Routes.getProfileRoute(), 'statue_of_liberty')}

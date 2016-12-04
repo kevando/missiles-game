@@ -6,8 +6,27 @@ var {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
 
+
   // ------------------------------
-  // Entire Tabbar
+  // Navigation Bar
+
+  navigationBarStyle: {
+    backgroundColor: Colors.blue,
+    padding:0
+  },
+
+  navTitleStyle: {
+    ...Title,
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: '500'
+  },
+
+  barButtonTextStyle: {
+    color: Colors.grey,
+  },
+  // ------------------------------
+  // Entire Tab Bar
 
   sceneStyle: {
     paddingBottom: 70,

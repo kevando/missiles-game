@@ -173,32 +173,23 @@ export const routes = {
     };
   },
 
-  //
-  //
-  //
-  //
-  //
-  // getMapsRoute() {
-  //   return {
-  //     renderScene(navigator) {
-  //       return <Maps navigator={navigator} />;
-  //     },
-  //
-  //     showNavigationBar: false,
-  //   };
-  // },
 
   // --------------------------------------------------------------------
-  //  PROFILE ROUTE
+  //  HOME ROUTE
   // --------------------------------------------------------------------
 
   getProfileRoute() {
     return {
+
       renderScene(navigator) {
         return <Profile navigator={navigator} />;
       },
 
-      showNavigationBar: false,
+      getTitle() {
+        return 'Home Base';
+      },
+
+      showNavigationBar: true,
     };
   },
 
