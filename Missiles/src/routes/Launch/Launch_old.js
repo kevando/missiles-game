@@ -1,6 +1,3 @@
-
-
-
 import React from 'react';
 import {
   StyleSheet,
@@ -71,10 +68,7 @@ function angle(cx, cy, ex, ey) {
   return thetaWhole
 }
 
-
-import Launch from './Launch';
-
-export default class LaunchContainer extends React.Component {
+class Launch extends React.Component {
   constructor(props) {
     super(props);
 
@@ -176,17 +170,17 @@ export default class LaunchContainer extends React.Component {
       });
 
     });
-//
-//     this.setState({
-//       targetMarker: {
-//     coordinate: {
-//       latitude: this.props.target.location.coords.latitude,
-//       longitude: this.props.target.location.coords.longitude,
-//     },
-//     color: 'green',
-// },
-//
-//     });
+
+    this.setState({
+      targetMarker: {
+    coordinate: {
+      latitude: this.props.target.location.coords.latitude,
+      longitude: this.props.target.location.coords.longitude,
+    },
+    color: 'green',
+},
+
+    });
 
 
 
@@ -319,10 +313,148 @@ export default class LaunchContainer extends React.Component {
 
 
   render() {
+    if(!this.state.currentRegion) return <View />
 
+    const {weapon, navigator} = this.props;
 
     return (
-      <Launch {...this.props} />
+      <View style={styles.container}>
+        <MapView
+          provider={this.props.provider}
+          ref={ref => { this.map = ref; }}
+          mapType={MAP_TYPES.TERRAIN}
+          style={styles.map}
+          initialRegion={this.state.currentRegion}
+          onRegionChange={region => this.onRegionChange(region)}
+          onPress={(e) => this.onMapPress(e)}
+          showsUserLocation={true}
+          zoomEnabled={this.state.zoomEnabled}
+          scrollEnabled={this.state.scrollEnabled}
+          pitchEnabled={true}
+          rotateEnabled={false}
+          mapType='satellite'
+
+        >
+
+
+
+
+        {this.state.launched &&
+          <MapView.Marker.Animated
+            coordinate={this.state.missileMarker.coordinate}
+            image={missileImg}
+            style={{transform: [{rotate: this.state.missileDirection+'deg'}],}}
+          />
+        }
+
+
+        {this.state.targetMarker &&
+          <MapView.Marker
+            coordinate={this.state.targetMarker.coordinate}
+            image={crossIco}
+          />
+        }
+
+          {this.state.flightPath &&
+            <MapView.Polyline
+              key="flightPathPolyline"
+              coordinates={this.state.flightPath.coordinates}
+              strokeColor="#F00"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={2}
+            />
+          }
+
+        </MapView>
+
+
+        <View style={styles.buttonContainer}>
+
+
+          {this.state.targetMarker && this.state.distance != 'unknown' && !this.state.launched &&
+            <TouchableOpacity
+              onPress={this.fireMissile.bind(this)}
+              style={[styles.bubble, styles.button]}
+            >
+              <Text>FIRE</Text>
+            </TouchableOpacity>
+
+            }
+
+            {this.state.impact &&
+              <TouchableOpacity style={[styles.bubble, styles.button,{backgroundColor:'blue'}]} onPress={() => navigator.push(Routes.getFriendsRoute()) } >
+                <Text style={{color:'white'}}>EXIT</Text>
+              </TouchableOpacity>
+            }
+
+
+
+
+        </View>
+        <View style={styles.navContainer}>
+        {this.state.targetMarker && this.state.destination != 'unknown' &&
+          <Text style={styles.distance}>TARGET: {this.props.target.username}</Text>
+
+        }
+
+        </View>
+
+
+
+      </View>
     );
   }
 }
+
+Launch.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  bubble: {
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  latlng: {
+    width: 200,
+    alignItems: 'stretch',
+  },
+  button: {
+    width: 80,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 10,
+    backgroundColor: 'red',
+
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    backgroundColor: 'transparent',
+  },
+  navContainer: {
+    flexDirection: 'column',
+    marginVertical: 20,
+    backgroundColor: '#fff',
+    // flex:1,
+  },
+  distance: {
+    fontSize: 26
+  },
+  plainView: {
+    width: 160,
+    backgroundColor: 'yellow'
+  },
+});
+
+module.exports = Launch;

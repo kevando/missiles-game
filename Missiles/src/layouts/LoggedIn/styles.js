@@ -12,19 +12,19 @@ export default StyleSheet.create({
 
   navigationBarStyle: {
     backgroundColor: Colors.blue,
-    padding:0
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.red
   },
-
   navTitleStyle: {
     ...Title,
     color: Colors.white,
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '500'
   },
-
   barButtonTextStyle: {
     color: Colors.grey,
   },
+
   // ------------------------------
   // Entire Tab Bar
 

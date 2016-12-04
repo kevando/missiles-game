@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 
 import Friends from './Friends';
+import Routes from '../../config/routes';
+
+class FriendsContainer extends Component {
 
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as playersActions from '../../actions/players';
+  onTargetPress(target) {
 
-function mapStateToProps({weapons, app, players}) {
-  return {
+    const { setTarget, navigator } = this.props;
 
-    weapons,
-    user: app.user,
-    players
+    setTarget(target); // Redux
+    
+
+    navigator.push(Routes.getLaunchRoute())
+
+  }
+
+  render() {
+
+    return (
+      <Friends {...this.props} {...this.state} onTargetPress={this.onTargetPress} />
+    );
 
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(playersActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Friends)
+export default FriendsContainer;

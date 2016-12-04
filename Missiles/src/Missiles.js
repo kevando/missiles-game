@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import {
-  WeaponsActions,
+  // WeaponsActions,
   MissilesActions,
 } from './actions';
 
@@ -153,7 +153,7 @@ class Missiles extends Component {
     this.setState({appInitialized: true});
 
     playersActions.listenForPlayers();
-    weaponsActions.listenForWeapons();
+
     missilesActions.listenForMissiles();
 
 
@@ -201,7 +201,7 @@ function mapDispatchToProps(dispatch) {
   return {
     appActions: bindActionCreators(appActions, dispatch),
     playersActions: bindActionCreators(playersActions, dispatch),
-    weaponsActions: bindActionCreators(WeaponsActions, dispatch),
+
     missilesActions: bindActionCreators(MissilesActions, dispatch),
   }
 }

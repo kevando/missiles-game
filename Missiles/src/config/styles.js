@@ -16,7 +16,7 @@ export const Colors = {
   black: '#1e1e1e',
   grey: '#c6c6c6',
   white: '#f4f2ef',
-  red: '#fb3640',
+  red: '#e51919',
   blue: '#1d3461',
 };
 

@@ -7,8 +7,8 @@ export default StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
-    backgroundColor: colors.background,
-    paddingTop: 50,
+    // backgroundColor: colors.background,
+
   },
 
   headerText: {
@@ -21,7 +21,7 @@ export default StyleSheet.create({
   listItem: {
     flex: 1,
     backgroundColor: '#eee',
-    borderColor: '#aaa',
+    borderColor: '#000',
     borderBottomWidth:1,
     // borderTopWidth:1,
     paddingVertical: 8,

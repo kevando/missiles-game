@@ -102,7 +102,7 @@ export const routes = {
   },
 
   // --------------------------------------------------------------------
-  // FRIENDS ROUTE (Pre Launch)
+  // FRIENDS ROUTE
   // --------------------------------------------------------------------
 
   getFriendsRoute() {
@@ -112,9 +112,9 @@ export const routes = {
       },
 
       getTitle() {
-        return 'Choose your target';
+        return 'Comrades';
       },
-      showNavigationBar: false,
+      showNavigationBar: true,
     };
   },
 
@@ -122,14 +122,14 @@ export const routes = {
   // LAUNCH ROUTE
   // --------------------------------------------------------------------
 
-  getLaunchRoute(target, weapon) {
+  getLaunchRoute() {
     return {
       renderScene(navigator) {
-        return <Launch navigator={navigator} target={target} weapon={weapon} />;
+        return <Launch navigator={navigator} />;
       },
 
       getTitle() {
-        return 'Find your target';
+        return 'Map';
       },
 
       showNavigationBar: false, // gets inherited?

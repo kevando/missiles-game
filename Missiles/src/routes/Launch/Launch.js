@@ -18,7 +18,9 @@ import crossIco from '../../images/crossIco.png';
 
 import Routes from '../../config/routes';
 
-import Emoji from 'react-native-emoji';
+import Emoji from '../../components/Emoji';
+import styles from './styles';
+
 import _ from 'lodash';
 
 const { width, height } = Dimensions.get('window');
@@ -74,6 +76,7 @@ class Launch extends React.Component {
 
     this.state = {
 
+      location: null,
       launched: false,
       distance: 'unknown',
 
@@ -170,17 +173,17 @@ class Launch extends React.Component {
       });
 
     });
-
-    this.setState({
-      targetMarker: {
-    coordinate: {
-      latitude: this.props.target.location.coords.latitude,
-      longitude: this.props.target.location.coords.longitude,
-    },
-    color: 'green',
-},
-
-    });
+//
+//     this.setState({
+//       targetMarker: {
+//     coordinate: {
+//       latitude: this.props.target.location.coords.latitude,
+//       longitude: this.props.target.location.coords.longitude,
+//     },
+//     color: 'green',
+// },
+//
+//     });
 
 
 
@@ -191,33 +194,14 @@ class Launch extends React.Component {
   }
 
 
-
-  animateToHome() {
-    this.map.animateToRegion(this.homeRegion());
-  }
-
-  homeRegion() {
-    // alert('asdf')
-    const { region, targetMarker } = this.state;
-    return {
-      // ...this.state.region,
-      latitude: targetMarker.coordinate.latitude,// + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
-      longitude: targetMarker.coordinate.longitude,// + ((Math.random() - 0.5) * (region.longitudeDelta / 2)),
-      // latitudeDelta: region.latitudeDelta + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
-      // longitudeDelta: region.longitudeDelta + ((Math.random() - 0.5) * (region.longitudeDelta / 2)),
-    };
-  }
-
-
   onMapPress(e) {
-    if(!this.state.launched){
+    if(true){
       this.setState({
-        targetMarker: {
+        location: {
             coordinate: e.nativeEvent.coordinate,
-            color: 'red',
           },
-          distance: getDistance(e.nativeEvent.coordinate),
-          missileDirection: angle(this.state.currentRegion.latitude,this.state.currentRegion.longitude,e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
+          // distance: getDistance(e.nativeEvent.coordinate),
+          // missileDirection: angle(this.state.currentRegion.latitude,this.state.currentRegion.longitude,e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
       });
 
     }
@@ -310,6 +294,38 @@ class Launch extends React.Component {
   setDestination(){
     this.setState({destination:true});
   }
+  //
+
+  renderHomeMarker(){
+    return (
+      <MapView.Marker coordinate={this.state.currentRegion}>
+        <Emoji name="statue_of_liberty" style={styles.emoji}/>
+      </MapView.Marker>
+    )
+  }
+  renderTargetMarker(){
+    if(this.state.location){
+      return (
+        <MapView.Marker coordinate={this.state.location.coordinate}>
+        <Emoji name="point_down" style={styles.emoji}/>
+        </MapView.Marker>
+      )
+    }
+  }
+
+  renderButton(){
+    if(this.state.location){
+      return (
+          <TouchableOpacity
+            onPress={this.fireMissile.bind(this)}
+            style={styles.button}
+          >
+            <Text>FIRE MISSILE</Text>
+          </TouchableOpacity>
+      )
+    }
+  }
+
 
 
   render() {
@@ -332,11 +348,10 @@ class Launch extends React.Component {
           scrollEnabled={this.state.scrollEnabled}
           pitchEnabled={true}
           rotateEnabled={false}
-          mapType='satellite'
-
         >
 
-
+        { this.renderHomeMarker() }
+        { this.renderTargetMarker() }
 
 
         {this.state.launched &&
@@ -371,21 +386,8 @@ class Launch extends React.Component {
         <View style={styles.buttonContainer}>
 
 
-          {this.state.targetMarker && this.state.distance != 'unknown' && !this.state.launched &&
-            <TouchableOpacity
-              onPress={this.fireMissile.bind(this)}
-              style={[styles.bubble, styles.button]}
-            >
-              <Text>FIRE</Text>
-            </TouchableOpacity>
+          { this.renderButton() }
 
-            }
-
-            {this.state.impact &&
-              <TouchableOpacity style={[styles.bubble, styles.button,{backgroundColor:'blue'}]} onPress={() => navigator.push(Routes.getFriendsRoute()) } >
-                <Text style={{color:'white'}}>EXIT</Text>
-              </TouchableOpacity>
-            }
 
 
 
@@ -406,55 +408,6 @@ class Launch extends React.Component {
   }
 }
 
-Launch.propTypes = {
-  provider: MapView.ProviderPropType,
-};
 
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
-  latlng: {
-    width: 200,
-    alignItems: 'stretch',
-  },
-  button: {
-    width: 80,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    marginHorizontal: 10,
-    backgroundColor: 'red',
-
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    marginVertical: 20,
-    backgroundColor: 'transparent',
-  },
-  navContainer: {
-    flexDirection: 'column',
-    marginVertical: 20,
-    backgroundColor: '#fff',
-    // flex:1,
-  },
-  distance: {
-    fontSize: 26
-  },
-  plainView: {
-    width: 160,
-    backgroundColor: 'yellow'
-  },
-});
 
 module.exports = Launch;

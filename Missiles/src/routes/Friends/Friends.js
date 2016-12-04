@@ -22,13 +22,7 @@ class Friends extends Component {
   }
 
 
-  onTargetPress(target) {
-    const { user } = this.props;
-    if(target.location && target.uid != user.uid)
-      this.setState({target});
-    else
-      alert('This target is not available for some reason')
-  }
+
 
   getStyle(target) {
     if(!this.state.target){
@@ -51,29 +45,25 @@ class Friends extends Component {
   }
 
   render() {
-    const { user, navigator, players, weapons } = this.props;
+    const { user, navigator, players, weapons, onTargetPress, weapon } = this.props;
 
     const { missile, target } = this.state;
 
+    
 
     return (
       <View style={styles.container}>
 
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Available Targets</Text>
-        </View>
 
       {
         _.map(players,(target,i) => {
           if(target.location && target.uid != user.uid) {
 
             return (
-              <TouchableOpacity onPress={this.onTargetPress.bind(this,target) }  key={i} >
+              <TouchableOpacity onPress={onTargetPress.bind(this,target) }  key={i} >
                 <Text style={[styles.listItem,this.getStyle(target)]}>
-                  <H2><Emoji name={this.getEmoji(target)} />{`Fire at ${target.username}`}</H2>
-                  {target.location && user.username == 'kevin' &&
-                    <Text>{`Last heard from ${moment(target.location.timestamp).fromNow()}`}</Text>
-                  }
+                  <H2>{target.username}</H2>
+                  <Text>Health,stockpile,balance</Text>
                 </Text>
               </TouchableOpacity>
             )
