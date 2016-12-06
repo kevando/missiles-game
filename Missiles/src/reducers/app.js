@@ -37,10 +37,10 @@ const initialState = {
   initialized: false,
   authData: false,
   availableMissiles: [
-    {name: 'Long Range Bomber', price: 100, image: 'missile02'},
-    {name: 'Short Range Bomber', price: 100, image: 'missile01'},
-    {name: 'Medium Range Bomber', price: 100, image: 'missile04'},
-    {name: 'Torpedo Range Bomber', price: 100, image: 'missile03'},
+    {name: 'Scudd Missile', price: 109, image: 'missile02'},
+    {name: 'Short Range', price: 17500, image: 'missile01'},
+    {name: 'Max Power', price: 12400, image: 'missile04'},
+    {name: 'Torpedo', price: 10420, image: 'missile03'},
   ],
 };
 

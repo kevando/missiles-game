@@ -85,19 +85,15 @@ export function setImpact(weapon) {
     missile.status = 'landed';
 
     if(impactDistance < 1){
-      // if they got close, give them a 40% of getting the frag
-      var randomN = Math.random();
-
-      missile.frag = randomN < 0.4 ? true : false;
+      // if they guess within 1 km, give them a 70% of getting the frag
+      missile.frag = Math.random() < 0.7 ? true : false;
     }
 
     if(missile.frag){
-      alert('You HIT '+weapon.target.username+'!');
+      alert('You HIT '+weapon.target.username+'! You earned 100 coins.');
       FirebaseClient.notifyTargetImpact(missile);
-
     } else {
-      alert('You MISSED '+weapon.target.username+'!');
-      FirebaseClient.notifyTargetImpact(missile);
+      alert('You MISSED '+weapon.target.username+'. Better luck next time.');
     }
 
     const { dataRef } = getState().firebase;

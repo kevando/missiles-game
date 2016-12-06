@@ -2,4 +2,4 @@ cron:
 - description: Checking for Airborn Missiles
   url: /coins
   schedule: every 15 minutes
-  target: 2
+  target: 3

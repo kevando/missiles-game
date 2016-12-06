@@ -44,7 +44,7 @@ const News = (props) => {
 
 
         <View style={styles.footerTop}>
-          <Text style={styles.footerTitle}>{n00b.username.toUpperCase()} is charged up and ready</Text>
+          <Text style={styles.footerTitle}>Meet the new kid on the block: {n00b.username.toUpperCase()}</Text>
           <Text style={styles.footerEmojis}><Emoji name="battery" /><Emoji name="electric_plug" /><Emoji name="crystal_ball" /><Emoji name="hole" /></Text>
         </View>
 

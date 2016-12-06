@@ -167,14 +167,12 @@ class Launch extends React.Component {
   }
 
   componentWillUnmount(){
-    // this.watchID();
+    this.props.setLocation(null); // Clear Redux so markers stay in sync
   }
 
   onRegionChange(region) {
     this.setState({ region });
   }
-
-
 
 
   setImpact(missile) {
@@ -191,15 +189,11 @@ class Launch extends React.Component {
 
 
   setFlightPath() {
-    const { polylines, editing, senderMarker, targetMarker } = this.state;
+    const { currentRegion, location } = this.state;
 
-    //
     this.setState({
       flightPath: {
-        coordinates: [
-          senderMarker.coordinate,
-          targetMarker.coordinate
-        ]
+        coordinates: [currentRegion, location.coordinate]
       },
     });
   }
@@ -209,21 +203,16 @@ class Launch extends React.Component {
 
     const { fireMissile, weapon, user } = this.props;
 
-
-
     var missile = _.cloneDeep(weapon.missile);
 
     missile.sender = user;
-    // missile.target = target;
+    missile.target = weapon.target;
     missile.status = 'airborn';
     missile.firedAt = Date.now();
     missile.destination = weapon.location;//{latitude: this.state.targetMarker.coordinate.latitude, longitude: this.state.targetMarker.coordinate.longitude}
 
     // Redux
     fireMissile(missile);
-
-
-
 
     // Animation
     this.fitMarkers();
@@ -285,7 +274,7 @@ class Launch extends React.Component {
 
   renderFireButton(){
     const {missile,target,location} = this.props.weapon;
-    if(missile && target && location){
+    if(missile && target && location && !this.state.impact){
       return (
         <TouchableOpacity onPress={this.fireMissile.bind(this)}style={styles.button}>
           <Text style={{color:'#fff'}}>FIRE MISSILE</Text>
@@ -349,13 +338,6 @@ class Launch extends React.Component {
         }
 
 
-        {this.state.targetMarker &&
-          <MapView.Marker
-            coordinate={this.state.targetMarker.coordinate}
-            image={crossIco}
-          />
-        }
-
           {this.state.flightPath &&
             <MapView.Polyline
               key="flightPathPolyline"
@@ -387,10 +369,16 @@ class Launch extends React.Component {
           <Text style={styles.distance}>TARGET: {this.props.weapon.target.username}</Text>
         }
 
-        {this.props.weapon.missile ?
-          <Text style={styles.distance}>MISSILE: {this.props.weapon.missile.name}</Text>
-          :
+        {!this.props.user.weapons &&
+          <Text style={styles.distance}>YOU HAVE NO MISSILES</Text>
+        }
+
+        {this.props.user.weapons && !this.props.weapon.missile &&
           <Text onPress={()=>this.setState({modalOpen:true})} style={styles.chooseMissile}>Choose your missile</Text>
+        }
+
+        {this.props.weapon.missile &&
+          <Text style={styles.distance}>MISSILE: {this.props.weapon.missile.name}</Text>
         }
 
         </View>

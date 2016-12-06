@@ -42,7 +42,7 @@ DSN = 'https://missile-launch-bb06a.firebaseio.com/'
 
 firebase = FirebaseApplication(DSN, None)
 
-appVersion = 'v2'
+appVersion = 'v3'
 
 
 # ---------------------------------------------------------------------
@@ -102,8 +102,8 @@ class CoinsGenerator(webapp2.RequestHandler):
 
     def get(self):
 
-        # Give all players 4 coins (via cron every 5 minutes)
-        disperseCoins(4)
+        # Give all players 7 coins (via cron every 15 minutes)
+        disperseCoins(7)
 
         self.response.write('Coins added')
 
