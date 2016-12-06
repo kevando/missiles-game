@@ -13,7 +13,7 @@ class Market extends Component {
 
 
   render() {
-    const { user, weapons, buyWeapon } = this.props;
+    const { user, missiles, buyMissile } = this.props;
 
     return (
 
@@ -26,8 +26,8 @@ class Market extends Component {
         <View style={styles.weapons}>
 
         {
-          _.map(weapons,(weapon,i) => {
-            return <ForSale weapon={weapon} key={i} balance={user.balance} onPress={buyWeapon} />
+          _.map(missiles,(missile,i) => {
+            return <ForSale weapon={missile} key={i} balance={user.balance} onPress={buyMissile} />
           })
         }
 

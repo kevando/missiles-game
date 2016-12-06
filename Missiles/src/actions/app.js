@@ -37,12 +37,12 @@ export function listenForAuthChanges() {
   return (dispatch, getState) => {
     firebase.auth().onAuthStateChanged(function(authData) {
       if(authData) {
-        dispatch({ type: USER_LOGGED_IN, authData });
+        dispatch({ type: USER_LOGGED_IN, authData }); // for some reason this is not called every time
 
         // Save uid to disk so bg-geo can grab uid
         store.save('user', { uid: authData.uid });
         // Update player data (back up because logIn is fucking up)
-        
+
 
       } else {
         // This will clear the user object and redirect user to signIn page
@@ -78,6 +78,8 @@ export function logIn(username) {
         .child('players')
         .child(authData.uid)    // This will overwrite the users balance if it exists, but whatever
         .update({ deaths: 0, frags: 0, balance: 100, uid: authData.uid, username, permissions, pushToken, loggedInAt: Date.now() });
+      alert('successful signin')
+      dispatch({ type: USER_LOGGED_IN, authData }); // sometimes loggingIn does not get reset
     })
     .catch(function(error) {
       console.log('register auth cb error:',error)

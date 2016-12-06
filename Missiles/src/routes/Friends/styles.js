@@ -1,31 +1,34 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import { Colors, Title } from '../../config/styles';
 
 const window = Dimensions.get('window');
 export default StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    backgroundColor: colors.background,
-    paddingTop: 50,
-  },
-
-  headerText: {
-    fontSize: 30,
-    color: colors.headerText,
-    fontWeight: '600',
-    fontStyle: 'italic',
   },
 
   listItem: {
     flex: 1,
-    backgroundColor: '#eee',
-    borderColor: '#aaa',
+    backgroundColor: Colors.white,
+    borderColor: Colors.blue,
     borderBottomWidth:1,
-    // borderTopWidth:1,
-    paddingVertical: 8,
-    paddingHorizontal: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+  },
+
+  name: {
+    ...Title,
+    fontSize: 24,
+    fontWeight: '600'
+  },
+  label: {
+    ...Title,
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop:10,
+  },
+  value: {
+    fontWeight: '100'
   }
 
 });

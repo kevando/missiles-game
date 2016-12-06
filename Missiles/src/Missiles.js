@@ -9,14 +9,11 @@ import {
   View
 } from 'react-native';
 
-
+import FCM from "react-native-fcm";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import {
-  WeaponsActions,
-  MissilesActions,
-} from './actions';
+import {MissilesActions} from './actions';
 
 import * as appActions from './actions/app'; //
 import * as playersActions from './actions/players';
@@ -34,7 +31,7 @@ class Missiles extends Component {
 
   componentWillMount() {
 
-    // alert('component will mount')
+
     const { appActions, connectedRef } = this.props;
     // Dispatch a Firebase action to set the connection status
     appActions.checkConnection(connectedRef);
@@ -45,9 +42,6 @@ class Missiles extends Component {
 
     // This handler fires whenever bgGeo receives a location update.
     BackgroundGeolocation.on('location', this.onLocation.bind(this));
-
-    // This handler fires when movement states changes (stationary->moving; moving->stationary)
-    BackgroundGeolocation.on('motionchange', this.onMotionChange);
 
     // Now configure the plugin.
     BackgroundGeolocation.configure({
@@ -68,9 +62,9 @@ class Missiles extends Component {
       stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when user closes the app.
       startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
       // HTTP / SQLite config
-      http: 'https://missile-launch-bb06a.firebaseio.com/demo-app-locations1.json',
-      method: 'POST',
-      autoSync: true,         // <-- POST each location immediately to server
+      // http: 'https://missile-launch-bb06a.firebaseio.com/demo-app-locations1.json',
+      // method: 'POST',
+      // autoSync: true,         // <-- POST each location immediately to server
       // params: {               // <-- Optional HTTP params
       //   "auth_token": "maybe_your_server_authenticates_via_token_YES?"
       // }
@@ -84,15 +78,22 @@ class Missiles extends Component {
       }
     });
   }
+
+  componentDidMount() {
+     // not sure exactly how this works
+     // but this is required for remote push notifcations
+     FCM.requestPermissions();
+  }
+
+
   // You must remove listeners when your component unmounts
   componentWillUnmount() {
-    alert('component unmounted')
     // Remove BackgroundGeolocation listeners
     BackgroundGeolocation.un('location', this.onLocation);
     BackgroundGeolocation.un('motionchange', this.onMotionChange);
   }
   onLocation(location) {
-    // no fucking data is saved here, so i gotta pull it i guess
+    // no fucking data is saved here, so i gotta pull it from disk
     const { dataRef } = this.props;
     store.get('user')
       .then(user => {
@@ -105,34 +106,11 @@ class Missiles extends Component {
 
       })
 
-    console.log('- [js]location: ', JSON.stringify(location));
-
-    // console.log(this.props)
-    // alert('location changed'+user.uid);
-    // if(authData.uid){
-    //   dataRef
-    //     .child('players')
-    //     .child(uid)
-    //     .update({location});
-    // }
-
-
   }
-  onMotionChange(location) {
-    console.log('- [js]motionchanged: ', JSON.stringify(location));
-  }
-
 
   constructor(props) {
     super(props);
     this.state = { appInitialized: false }
-  }
-
-
-  componentDidMount () {
-
-
-
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -147,23 +125,15 @@ class Missiles extends Component {
 
   }
   _initializeApp() {
-
     const { playersActions, weaponsActions, missilesActions } = this.props;
-
     this.setState({appInitialized: true});
-
     playersActions.listenForPlayers();
-    weaponsActions.listenForWeapons();
     missilesActions.listenForMissiles();
-
-
   }
 
 
   render() {
-    const { connected, authData, user, players, initialized, loggingIn } = this.props;
-
-
+    const { connected, authData, user, initialized, loggingIn } = this.props;
 
     if (!connected) {
       return <Loading message="Connecting" />;
@@ -172,14 +142,12 @@ class Missiles extends Component {
       return <Loading message="Logging In" />;
 
     } else if (user.uid) {
-      // alert(user.uid)
       return <LoggedIn />;
 
     } else {
       return <LoggedOut />;
     }
   }
-
 }
 
 
@@ -189,7 +157,6 @@ function mapStateToProps(state) {
     authData: state.app.authData,
     user: state.app.user,
     connectedRef: state.firebase.connectedRef,
-    players: state.players,
     initialized: state.app.initialized,
     loggingIn: state.app.loggingIn,
     dataRef: state.firebase.dataRef,
@@ -201,7 +168,6 @@ function mapDispatchToProps(dispatch) {
   return {
     appActions: bindActionCreators(appActions, dispatch),
     playersActions: bindActionCreators(playersActions, dispatch),
-    weaponsActions: bindActionCreators(WeaponsActions, dispatch),
     missilesActions: bindActionCreators(MissilesActions, dispatch),
   }
 }

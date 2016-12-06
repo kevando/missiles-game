@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 
-
-import Button from '../../components/Button';
 import styles from './styles';
 import Routes from '../../config/routes'; // put this in redux?
-import { H2 } from '../../components/Text';
-import { MyWeapon } from '../../components/Weapons';
 
 import _ from 'lodash';
 import moment from 'moment';
@@ -16,104 +12,44 @@ class Friends extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {missile: null,target: null}
-
-    this.getStyle = this.getStyle.bind(this);
+    // this.state = {missile: null,target: null}
   }
 
-
-  onTargetPress(target) {
-    const { user } = this.props;
-    if(target.location && target.uid != user.uid)
-      this.setState({target});
-    else
-      alert('This target is not available for some reason')
-  }
-
-  getStyle(target) {
-    if(!this.state.target){
-      return;
-    }
-    if(target.username == this.state.target.username){
-      return {backgroundColor: '#ddd',fontWeight:'800'}
-    }
-    return {backgroundColor: '#fff',color:'#ccc'}
-  }
-
-  getEmoji(target) {
-    if(!this.state.target){
-      return 'neutral_face';
-    }
-    if(target.username == this.state.target.username){
-      return 'cold_sweat';
-    }
-    return 'sweat_smile';
-  }
 
   render() {
-    const { user, navigator, players, weapons } = this.props;
+    const { user, navigator, players, weapons, onTargetPress, weapon } = this.props;
 
-    const { missile, target } = this.state;
+
 
 
     return (
       <View style={styles.container}>
-
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Available Targets</Text>
-        </View>
+        <ScrollView>
 
       {
         _.map(players,(target,i) => {
           if(target.location && target.uid != user.uid) {
 
             return (
-              <TouchableOpacity onPress={this.onTargetPress.bind(this,target) }  key={i} >
-                <Text style={[styles.listItem,this.getStyle(target)]}>
-                  <H2><Emoji name={this.getEmoji(target)} />{`Fire at ${target.username}`}</H2>
-                  {target.location && user.username == 'kevin' &&
-                    <Text>{`Last heard from ${moment(target.location.timestamp).fromNow()}`}</Text>
-                  }
-                </Text>
+              <TouchableOpacity style={styles.listItem} onPress={onTargetPress.bind(this,target) }  key={i} >
+
+                  <Text style={styles.name}>{target.username}</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 2}}><Text style={styles.label}>Stockpile: <Text style={styles.value}>{target.weapons ? 'Yes' : 'No'}</Text></Text></View>
+                    <View style={{flex: 1}}><Text style={styles.label}>Frags: <Text style={styles.value}>{target.frags}</Text></Text></View>
+                    <View style={{flex: 1}}><Text style={styles.label}>Deaths: <Text style={styles.value}>{target.deaths}</Text></Text></View>
+
+                  </View>
+
               </TouchableOpacity>
             )
           } // do not show self, or users that do not have location set
         })
       }
 
-      {target &&
-        <View style={styles.weapons}>
 
 
-        {user.weapons ?
-          <View>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Select a Missile to fire</Text>
-          </View>
-            {
-              _.map(user.weapons,(weapon,i) => {
-                return (
-                  <TouchableOpacity key={i} onPress={() => navigator.push(Routes.getLaunchRoute(target,weapon)) } >
-                    <MyWeapon weapon={weapon}  />
-                  </TouchableOpacity>
-                )
-              })
-            }
-          </View>
-        :
-        <View>
-          <Text>You have no weapons to choose from</Text>
-        </View>
-        }
-
-
-        </View>
-
-
-
-      }
-
-
+      </ScrollView>
 
 
       </View>

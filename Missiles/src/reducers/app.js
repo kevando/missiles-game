@@ -35,7 +35,13 @@ const initialState = {
   },
   loggingIn: false,
   initialized: false,
-  authData: false
+  authData: false,
+  availableMissiles: [
+    {name: 'Scudd Missile', price: 109, image: 'missile02'},
+    {name: 'Short Range', price: 17500, image: 'missile01'},
+    {name: 'Max Power', price: 12400, image: 'missile04'},
+    {name: 'Torpedo', price: 10420, image: 'missile03'},
+  ],
 };
 
 export default function reducer(app = initialState, action) {
